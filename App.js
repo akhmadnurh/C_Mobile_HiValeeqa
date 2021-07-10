@@ -1,111 +1,82 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, {Component} from 'react';
+import {ScrollView, View, Text, StyleSheet, StatusBar} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <View style={styles.containerBody}>
+        <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+        <View style={styles.containerHeader}>
+          <View>
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>HI VALEEQA</Text>
+          </View>
+          <View>
+            <Icon name="cart-outline" size={24} />
+          </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+        <ScrollView></ScrollView>
+        <View style={styles.containerNav}>
+          <View style={styles.navItem}>
+            <Icon name="home" size={24} color="#FF8195" />
+            <Text
+              style={{
+                fontWeight: 'bold',
+                color: '#FF8195',
+              }}>
+              Home
+            </Text>
+          </View>
+          <View style={styles.navItem}>
+            <Icon name="clipboard" size={24} color="#dedede" />
+            <Text style={styles.navItemText}>Pesanan</Text>
+          </View>
+          <View style={styles.navItem}>
+            <Icon name="notifications" size={24} color="#dedede" />
+            <Text style={styles.navItemText}>Notifikasi</Text>
+          </View>
+          <View style={styles.navItem}>
+            <Icon name="person" size={24} color="#dedede" />
+            <Text style={styles.navItemText}>Akun</Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  containerBody: {
+    flex: 1,
+    backgroundColor: '#FCF6F7',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  containerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    elevation: 6,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  containerNav: {
+    backgroundColor: '#ffffff',
+    flexDirection: 'row',
   },
-  highlight: {
-    fontWeight: '700',
+  navItem: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 8,
+    marginHorizontal: 4,
+  },
+  navItemText: {
+    fontWeight: 'bold',
+    color: '#dedede',
   },
 });
 
