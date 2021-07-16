@@ -1,21 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {ScrollView, View, Text, StyleSheet, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import MainTabScreen from './screens/MainTabScreen';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  render() {
-    return (
-      <NavigationContainer>
-        <MainTabScreen />
-      </NavigationContainer>
-    );
-  }
-}
+const App = () => {
+  return (
+    <NavigationContainer>
+      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+      <MainTabScreen />
+    </NavigationContainer>
+  );
+};
 
 const styles = StyleSheet.create({
   containerBody: {
