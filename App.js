@@ -6,7 +6,6 @@ import MainTabScreen from './screens/MainTabScreen';
 const App = () => {
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <MainTabScreen />
     </NavigationContainer>
   );
