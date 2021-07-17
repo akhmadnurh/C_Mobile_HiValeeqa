@@ -9,6 +9,7 @@ import OrderScreen from './OrderScreen';
 import WishlistScreen from './WishlistScreen';
 import DetailScreen from './DetailScreen';
 import AccountScreen from './AccountScreen';
+import LoginScreen from './LoginScreen';
 
 const HomeStack = createStackNavigator();
 const DetailStack = createStackNavigator();
@@ -17,9 +18,10 @@ const Stack = createStackNavigator();
 
 const MainTabScreen = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName="Tabs">
+    <Stack.Navigator headerMode="none" initialRouteName="Login">
       <Stack.Screen name="Tabs" component={TabScreen} />
       <Stack.Screen name="Detail" component={DetailStackScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
     </Stack.Navigator>
   );
 };

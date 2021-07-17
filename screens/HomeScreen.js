@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,11 +18,10 @@ import axios from 'axios';
 function HomeScreen({navigation}) {
   const [data, setData] = useState();
   useEffect(() => {
-      axios.get('http://10.0.2.2:8000/api/shop').then(res => {
-        setData(res.data.products);
-    })
+    axios.get('http://10.0.2.2:8000/api/shop').then(res => {
+      setData(res.data.products);
+    });
   }, []);
-
 
   return (
     <SafeAreaView>
@@ -51,7 +50,7 @@ function HomeScreen({navigation}) {
               }>
               <Card.Image
                 style={{width: 120, borderRadius: 10}}
-                source={{uri: 'http://10.0.2.2:8000/img/produk/'+item.image}}
+                source={{uri: 'http://10.0.2.2:8000/img/produk/' + item.image}}
               />
               <Card.Title style={{marginTop: 8, marginBottom: 0}}>
                 {item.product_name}

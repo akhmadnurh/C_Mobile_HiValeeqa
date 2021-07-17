@@ -1,29 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, Alert} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Button} from 'react-native-paper';
-import axios from "axios";
+import axios from 'axios';
 
 const DetailScreen = ({route}) => {
   const {product_id} = route.params;
-  const [product, setProduct] = useState('')
+  const [product, setProduct] = useState('');
   // const [wishlist, setWishlist] = useState('')
 
   // Get data from api
   useEffect(() => {
-    axios.get('http://10.0.2.2:8000/api/detail/'+product_id).then(res => {
-      setProduct(res.data.product)
-    })
+    axios.get('http://10.0.2.2:8000/api/detail/' + product_id).then(res => {
+      setProduct(res.data.product);
+    });
   }, []);
-
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.img}>
-        <Image resizeMode="cover" source={{uri: 'http://10.0.2.2:8000/img/produk/'+product.image}} />
+        <Image
+          resizeMode="cover"
+          style={{width: 200, height: 300}}
+          source={{uri: 'http://10.0.2.2:8000/img/produk/' + product.image}}
+        />
       </View>
       <View style={styles.title}>
-        <Text style={{fontSize: 24, fontWeight: '700'}}>Rp {product.price}</Text>
+        <Text style={{fontSize: 24, fontWeight: '700'}}>
+          Rp {product.price}
+        </Text>
         <Text style={{fontSize: 16, fontWeight: '600', marginTop: 4}}>
           {product.product_name}
         </Text>
@@ -45,9 +50,7 @@ const DetailScreen = ({route}) => {
           <Text style={styles.listText}>{product.stock}</Text>
         </View>
         <View>
-          <Text style={styles.describeExtra}>
-            { product.description }
-          </Text>
+          <Text style={styles.describeExtra}>{product.description}</Text>
         </View>
         <View
           style={{
