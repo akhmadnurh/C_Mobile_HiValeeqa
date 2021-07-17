@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import {View, Text, Image, StyleSheet, Alert} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Button} from 'react-native-paper';
+import axios from "axios";
 
 const DetailScreen = ({route}) => {
-  const {name, price, material, color, image, stok} = route.params;
+  const {product_id} = route.params;
+  const [product, setProduct] = useState('')
+  // const [wishlist, setWishlist] = useState('')
+
+  // Get data from api
+  useEffect(() => {
+    axios.get('http://10.0.2.2:8000/api/detail/'+product_id).then(res => {
+      setProduct(res.data.product)
+    })
+  }, []);
+
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.img}>
-        <Image resizeMode="cover" source={{uri: image}} />
+        <Image resizeMode="cover" source={{uri: 'http://10.0.2.2:8000/img/produk/'+product.image}} />
       </View>
       <View style={styles.title}>
-        <Text style={{fontSize: 24, fontWeight: '700'}}>Rp {price}</Text>
+        <Text style={{fontSize: 24, fontWeight: '700'}}>Rp {product.price}</Text>
         <Text style={{fontSize: 16, fontWeight: '600', marginTop: 4}}>
-          {name}
+          {product.product_name}
         </Text>
       </View>
       <View style={styles.description}>
@@ -22,22 +34,19 @@ const DetailScreen = ({route}) => {
         </Text>
         <View style={styles.list}>
           <Text style={styles.listTitle}>Bahan</Text>
-          <Text style={styles.listText}>{material}</Text>
+          <Text style={styles.listText}>{product.material}</Text>
         </View>
         <View style={styles.list}>
           <Text style={styles.listTitle}>Warna</Text>
-          <Text style={styles.listText}>{color}</Text>
+          <Text style={styles.listText}>{product.color}</Text>
         </View>
         <View style={styles.list}>
           <Text style={styles.listTitle}>Stok</Text>
-          <Text style={styles.listText}>{stok}</Text>
+          <Text style={styles.listText}>{product.stock}</Text>
         </View>
         <View>
           <Text style={styles.describeExtra}>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-            Repellendus corporis reiciendis quisquam vel hic recusandae suscipit
-            laborum magni maiores commodi doloribus tempora unde nihil fugiat
-            alias, pariatur ut explicabo eveniet.
+            { product.description }
           </Text>
         </View>
         <View

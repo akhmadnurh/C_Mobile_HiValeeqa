@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,70 +13,16 @@ import {Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import DetailScreen from './DetailScreen';
+import axios from 'axios';
 
 function HomeScreen({navigation}) {
-  const [data, setData] = useState([
-    {
-      id: 1,
-      name: 'Yumna Dress 1',
-      price: 120000,
-      material: 'Katun',
-      color: 'Pink',
-      stok: 10,
-      image:
-        'https://images.unsplash.com/photo-1626322751504-930506dd41ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-    },
-    {
-      id: 2,
-      name: 'Yumna Dress 2',
-      price: 120000,
-      material: 'Katun',
-      color: 'Pink',
-      stok: 10,
-      image:
-        'https://images.unsplash.com/photo-1626322751504-930506dd41ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-    },
-    {
-      id: 3,
-      name: 'Yumna Dress 3',
-      price: 120000,
-      material: 'Katun',
-      color: 'Pink',
-      stok: 10,
-      image:
-        'https://images.unsplash.com/photo-1626322751504-930506dd41ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-    },
-    {
-      id: 4,
-      name: 'Yumna Dress 4',
-      price: 120000,
-      material: 'Katun',
-      color: 'Pink',
-      stok: 10,
-      image:
-        'https://images.unsplash.com/photo-1626322751504-930506dd41ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-    },
-    {
-      id: 5,
-      name: 'Yumna Dress 5',
-      price: 120000,
-      material: 'Katun',
-      color: 'Pink',
-      stok: 10,
-      image:
-        'https://images.unsplash.com/photo-1626322751504-930506dd41ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-    },
-    {
-      id: 6,
-      name: 'Yumna Dress 6',
-      price: 120000,
-      material: 'Katun',
-      color: 'Pink',
-      stok: 10,
-      image:
-        'https://images.unsplash.com/photo-1626322751504-930506dd41ca?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-    },
-  ]);
+  const [data, setData] = useState();
+  useEffect(() => {
+      axios.get('http://10.0.2.2:8000/api/shop').then(res => {
+        setData(res.data.products);
+    })
+  }, []);
+
 
   return (
     <SafeAreaView>
@@ -99,21 +45,16 @@ function HomeScreen({navigation}) {
                 navigation.navigate('Detail', {
                   screen: 'DetailScreen',
                   params: {
-                    name: item.name,
-                    price: item.price,
-                    material: item.material,
-                    color: item.color,
-                    image: item.image,
-                    stok: item.stok,
+                    product_id: item.product_id,
                   },
                 })
               }>
               <Card.Image
                 style={{width: 120, borderRadius: 10}}
-                source={{uri: item.image}}
+                source={{uri: 'http://10.0.2.2:8000/img/produk/'+item.image}}
               />
               <Card.Title style={{marginTop: 8, marginBottom: 0}}>
-                {item.name}
+                {item.product_name}
               </Card.Title>
               <Card.Title style={{marginTop: 8, marginBottom: 0}}>
                 Rp {item.price}
