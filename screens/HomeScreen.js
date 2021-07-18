@@ -4,16 +4,20 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  Image,
-  TouchableOpacity,
   Pressable,
+  StatusBar,
 } from 'react-native';
 import {Card} from 'react-native-elements';
-import {Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useIsFocused} from '@react-navigation/core';
 
-import DetailScreen from './DetailScreen';
 import axios from 'axios';
+
+function FocusAwareStatusBar(props) {
+  const isFocused = useIsFocused();
+
+  return isFocused ? <StatusBar {...props} /> : null;
+}
 
 function HomeScreen({navigation}) {
   const [data, setData] = useState();
@@ -25,6 +29,7 @@ function HomeScreen({navigation}) {
 
   return (
     <SafeAreaView>
+      <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
       <FlatList
         showsVerticalScrollIndicator={false}
         columnWrapperStyle={{justifyContent: 'center'}}

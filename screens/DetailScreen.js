@@ -110,7 +110,7 @@ const DetailScreen = ({ route }) => {
               (<Button
                 icon="heart"
                 mode="outlined"
-                color="#FF8195"
+                color="#e87c80"
                 style={{
                   borderRadius: 8,
                   marginRight: 8,
@@ -123,12 +123,12 @@ const DetailScreen = ({ route }) => {
               (<Button
                 icon="heart"
                 mode="outlined"
-                color="#FF8195"
+                color="#e87c80"
                 style={{
                   borderRadius: 8,
                   marginRight: 8,
-                  justifyContent: "center",
-                  borderColor: "#FF8195",
+                  justifyContent: 'center',
+                  borderColor: '#e87c80',
                 }}
                 onPress={removeWishlist}>Wishlisted
               </Button>)
@@ -136,10 +136,10 @@ const DetailScreen = ({ route }) => {
 
           <Button
             mode="contained"
-            color="#FF8195"
-            labelStyle={{ color: "#fff" }}
-            style={{ borderRadius: 8, flex: 0.8 }}
-            onPress={() => Alert.alert("clicked")}>
+            color="#e87c80"
+            labelStyle={{color: '#fff'}}
+            style={{borderRadius: 8, flex: 0.8}}
+            onPress={() => Alert.alert('clicked')}>
             Add to Cart
           </Button>
         </View>

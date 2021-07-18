@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {IconButton} from 'react-native-paper';
+import {useIsFocused} from '@react-navigation/core';
 
 import HomeScreen from './HomeScreen';
 import OrderScreen from './OrderScreen';
@@ -13,12 +14,13 @@ import LoginScreen from './LoginScreen';
 
 const HomeStack = createStackNavigator();
 const DetailStack = createStackNavigator();
+const AccountStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const MainTabScreen = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName="Login">
+    <Stack.Navigator headerMode="none" initialRouteName="Tabs">
       <Stack.Screen name="Tabs" component={TabScreen} />
       <Stack.Screen name="Detail" component={DetailStackScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
@@ -31,7 +33,7 @@ export default MainTabScreen;
 const TabScreen = () => (
   <Tab.Navigator
     initialRouteName="Home"
-    activeColor="#FF8195"
+    activeColor="#e87c80"
     inactiveColor="#dedede"
     barStyle={{backgroundColor: '#fff'}}>
     <Tab.Screen
@@ -62,7 +64,7 @@ const TabScreen = () => (
     />
     <Tab.Screen
       name="Account"
-      component={AccountScreen}
+      component={AccountStackScreen}
       options={{
         tabBarLabel: 'Akun',
         tabBarIcon: ({color}) => <Icon name="person" color={color} size={24} />,
@@ -74,7 +76,7 @@ const TabScreen = () => (
 const HomeStackScreen = () => (
   <HomeStack.Navigator
     screenOptions={{
-      headerStyle: {backgroundColor: '#fff', elevation: 5},
+      headerStyle: {backgroundColor: '#fff', elevation: 2},
       headerTintColor: '#000',
     }}>
     <HomeStack.Screen
@@ -87,7 +89,7 @@ const HomeStackScreen = () => (
           <IconButton
             icon="basket"
             size={26}
-            color="#FF8195"
+            color="#e87c80"
             style={{paddingEnd: 0, backgroundColor: '#fff'}}
             onPress={() => console.log('Pressed')}
           />
@@ -100,7 +102,7 @@ const HomeStackScreen = () => (
 const DetailStackScreen = () => (
   <DetailStack.Navigator
     screenOptions={{
-      headerStyle: {backgroundColor: '#fff', elevation: 5},
+      headerStyle: {backgroundColor: '#fff', elevation: 2},
       headerTintColor: '#000',
     }}>
     <DetailStack.Screen
@@ -111,4 +113,20 @@ const DetailStackScreen = () => (
       }}
     />
   </DetailStack.Navigator>
+);
+
+const AccountStackScreen = () => (
+  <AccountStack.Navigator
+    screenOptions={{
+      headerStyle: {backgroundColor: '#e87c80', elevation: 0},
+      headerTintColor: '#fff',
+    }}>
+    <AccountStack.Screen
+      name="AccountScreen"
+      component={AccountScreen}
+      options={{
+        title: 'Akun',
+      }}
+    />
+  </AccountStack.Navigator>
 );
