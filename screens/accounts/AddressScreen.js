@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-
+import {Input} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
 
 function AddressScreen() {
@@ -10,6 +10,56 @@ function AddressScreen() {
       style={{backgroundColor: '#e87c80'}}>
       <View style={{height: 40}} />
       <View style={styles.curves} />
+      <View style={styles.container}>
+        <Input
+          label="Provinsi"
+          labelStyle={{color: '#dedede'}}
+          inputContainerStyle={{
+            borderBottomColor: '#dedede',
+          }}
+          value="Jawa Timur"
+        />
+      </View>
+      <View style={styles.container}>
+        <Input
+          label="Kabupaten"
+          labelStyle={{color: '#dedede'}}
+          inputContainerStyle={{
+            borderBottomColor: '#dedede',
+          }}
+          value="Jember"
+        />
+      </View>
+      <View style={styles.container}>
+        <Input
+          label="Kecamatan"
+          labelStyle={{color: '#dedede'}}
+          inputContainerStyle={{
+            borderBottomColor: '#dedede',
+          }}
+          value="Jember"
+        />
+      </View>
+      <View style={styles.container}>
+        <Input
+          label="Kelurahan"
+          labelStyle={{color: '#dedede'}}
+          inputContainerStyle={{
+            borderBottomColor: '#dedede',
+          }}
+          value="Jember"
+        />
+      </View>
+      <View style={styles.container}>
+        <Input
+          label="Alamat Lengkap"
+          labelStyle={{color: '#dedede'}}
+          inputContainerStyle={{
+            borderBottomColor: '#dedede',
+          }}
+          value="Jember"
+        />
+      </View>
     </ScrollView>
   );
 }
