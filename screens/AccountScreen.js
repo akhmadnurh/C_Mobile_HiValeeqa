@@ -43,7 +43,6 @@ function AccountScreen({navigation}) {
             .get(url+'/api/profile', {params: data})
             .then(res => {
               setUserdata(res.data.user);
-              console.log(res.data.user);
             });
         };
 

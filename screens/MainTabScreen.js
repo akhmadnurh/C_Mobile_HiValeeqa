@@ -138,11 +138,6 @@ const AccountStackScreen = () => (
       component={ProfileScreen}
       options={{
         title: 'Profil',
-        headerRight: () => (
-          <TouchableOpacity>
-            <Text style={{color: '#fff'}}>Simpan</Text>
-          </TouchableOpacity>
-        ),
         headerRightContainerStyle: {
           marginEnd: 20,
         },
