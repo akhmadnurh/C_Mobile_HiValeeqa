@@ -61,6 +61,7 @@ function HomeScreen({navigation}) {
             </Pressable>
           </Card>
         )}
+        keyExtractor={item => item.product_id}
       />
     </SafeAreaView>
   );
