@@ -25,22 +25,25 @@ function AccountScreen({ navigation }) {
   const [userdata, setUserdata] = useState("");
 
   useEffect(() => {
-    try {
-      const getUserdata = async () => {
-        const user_id = await AsyncStorage.getItem("user_id");
-        const data = {
-          user_id: JSON.parse(user_id),
+    const unsubscribe = navigation.addListener("focus", () => {
+      try {
+        const getUserdata = async () => {
+          const user_id = await AsyncStorage.getItem("user_id");
+          const data = {
+            user_id: JSON.parse(user_id),
+          };
+          axios.get("http://10.0.2.2:8000/api/profile", { params: data }).then(res => {
+            setUserdata(res.data.user);
+            console.log(res.data.user);
+          });
         };
-        axios.get("http://10.0.2.2:8000/api/profile", { params: data }).then(res => {
-          setUserdata(res.data.user);
-          console.log(res.data)
-        });
-      };
 
-      getUserdata();
-    } catch (e) {
-      console.warn(e.message);
-    }
+        getUserdata();
+      } catch (e) {
+        console.warn(e.message);
+      }
+    });
+    return unsubscribe;
   }, []);
 
   const logout = () => {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,12 +6,12 @@ import {
   FlatList,
   Pressable,
   StatusBar,
-} from 'react-native';
-import {Card} from 'react-native-elements';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useIsFocused} from '@react-navigation/core';
+} from "react-native";
+import { Card } from "react-native-elements";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useIsFocused } from "@react-navigation/core";
 
-import axios from 'axios';
+import axios from "axios";
 
 function FocusAwareStatusBar(props) {
   const isFocused = useIsFocused();
@@ -19,12 +19,15 @@ function FocusAwareStatusBar(props) {
   return isFocused ? <StatusBar {...props} /> : null;
 }
 
-function HomeScreen({navigation}) {
+function HomeScreen({ navigation }) {
   const [data, setData] = useState();
   useEffect(() => {
-    axios.get('http://10.0.2.2:8000/api/shop').then(res => {
-      setData(res.data.products);
+    const unsubscribe = navigation.addListener("focus", () => {
+      axios.get("http://10.0.2.2:8000/api/shop").then(res => {
+        setData(res.data.products);
+      });
     });
+    return unsubscribe;
   }, []);
 
   return (
@@ -32,35 +35,35 @@ function HomeScreen({navigation}) {
       <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
       <FlatList
         showsVerticalScrollIndicator={false}
-        columnWrapperStyle={{justifyContent: 'center'}}
+        columnWrapperStyle={{ justifyContent: "center" }}
         style={styles.container}
         data={data}
         numColumns={2}
-        ListFooterComponent={<View style={{height: 30}} />}
+        ListFooterComponent={<View style={{ height: 30 }} />}
         ListHeaderComponent={() => (
           <Text style={styles.title}>Produk Terbaru</Text>
         )}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <Card containerStyle={styles.card}>
             <Pressable
-              style={{padding: 24}}
-              android_ripple={{color: '#f2f2f2'}}
+              style={{ padding: 24 }}
+              android_ripple={{ color: "#f2f2f2" }}
               onPress={() =>
-                navigation.navigate('Detail', {
-                  screen: 'DetailScreen',
+                navigation.navigate("Detail", {
+                  screen: "DetailScreen",
                   params: {
                     product_id: item.product_id,
                   },
                 })
               }>
               <Card.Image
-                style={{width: 120, borderRadius: 10}}
-                source={{uri: 'http://10.0.2.2:8000/img/produk/' + item.image}}
+                style={{ width: 120, borderRadius: 10 }}
+                source={{ uri: "http://10.0.2.2:8000/img/produk/" + item.image }}
               />
-              <Card.Title style={{marginTop: 8, marginBottom: 0}}>
+              <Card.Title style={{ marginTop: 8, marginBottom: 0 }}>
                 {item.product_name}
               </Card.Title>
-              <Card.Title style={{marginTop: 8, marginBottom: 0}}>
+              <Card.Title style={{ marginTop: 8, marginBottom: 0 }}>
                 Rp {item.price}
               </Card.Title>
             </Pressable>
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   card: {
     elevation: 0,

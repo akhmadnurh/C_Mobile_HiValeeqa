@@ -5,30 +5,33 @@ import { Button } from "react-native-paper";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const DetailScreen = ({ route }) => {
+const DetailScreen = ({ route, navigation }) => {
   const { product_id } = route.params;
   const [product, setProduct] = useState("");
   const [wishlist, setWishlist] = useState("");
 
   // Get data from api
   useEffect(() => {
-    try {
-      const checkWishlist = async () => {
-        const user_id = await AsyncStorage.getItem("user_id");
-        const data = {
-          user_id: user_id,
+    const unsubscribe = navigation.addListener("focus", () => {
+      try {
+        const checkWishlist = async () => {
+          const user_id = await AsyncStorage.getItem("user_id");
+          const data = {
+            user_id: user_id,
+          };
+          axios.get("http://10.0.2.2:8000/api/detail/" + product_id, { params: data }).then(res => {
+            setProduct(res.data.product);
+            setWishlist(res.data.wishlist);
+          });
         };
-        axios.get("http://10.0.2.2:8000/api/detail/" + product_id, { params: data }).then(res => {
-          setProduct(res.data.product);
-          setWishlist(res.data.wishlist);
-        });
-      };
 
-      checkWishlist();
-    } catch (e) {
-      console.log(e.message);
-    }
+        checkWishlist();
+      } catch (e) {
+        console.log(e.message);
+      }
+    });
 
+    return unsubscribe;
   }, []);
 
   // Wishlist
@@ -127,8 +130,8 @@ const DetailScreen = ({ route }) => {
                 style={{
                   borderRadius: 8,
                   marginRight: 8,
-                  justifyContent: 'center',
-                  borderColor: '#e87c80',
+                  justifyContent: "center",
+                  borderColor: "#e87c80",
                 }}
                 onPress={removeWishlist}>Wishlisted
               </Button>)
@@ -137,9 +140,9 @@ const DetailScreen = ({ route }) => {
           <Button
             mode="contained"
             color="#e87c80"
-            labelStyle={{color: '#fff'}}
-            style={{borderRadius: 8, flex: 0.8}}
-            onPress={() => Alert.alert('clicked')}>
+            labelStyle={{ color: "#fff" }}
+            style={{ borderRadius: 8, flex: 0.8 }}
+            onPress={() => Alert.alert("clicked")}>
             Add to Cart
           </Button>
         </View>
