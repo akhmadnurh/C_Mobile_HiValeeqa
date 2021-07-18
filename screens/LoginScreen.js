@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,33 +7,35 @@ import {
   Linking,
   TouchableOpacity,
   View,
-} from "react-native";
-import { Input } from "react-native-elements";
-import { Button } from "react-native-paper";
-import { CommonActions } from "@react-navigation/routers";
-import Icon from "react-native-vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import url from "../url";
+  StatusBar,
+} from 'react-native';
+import {Input} from 'react-native-elements';
+import {Button} from 'react-native-paper';
+import {useIsFocused} from '@react-navigation/core';
+import {CommonActions} from '@react-navigation/routers';
+import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import url from '../url';
 
 const resetAction = CommonActions.reset({
   index: 1,
   routes: [
     {
-      name: "Tabs",
+      name: 'Tabs',
     },
   ],
 });
 
-const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginScreen = ({navigation}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       try {
         const isLoggedIn = async () => {
-          const value = await AsyncStorage.getItem("isLoggedIn");
+          const value = await AsyncStorage.getItem('isLoggedIn');
           if (value !== null) {
             navigation.dispatch(resetAction);
           }
@@ -51,32 +53,41 @@ const LoginScreen = ({ navigation }) => {
       userEmail: username,
       password: password,
     };
-    axios.post(url+"/api/login", data).then(res => {
-      if (res.data.msg == "user") {
+    axios.post(url + '/api/login', data).then(res => {
+      if (res.data.msg == 'user') {
         AsyncStorage.setItem(
-          "user_id",
+          'user_id',
           JSON.stringify(res.data.userdata.user_id),
         );
-        AsyncStorage.setItem("email", res.data.userdata.email);
-        AsyncStorage.setItem("password", res.data.userdata.password);
-        AsyncStorage.setItem("role", JSON.stringify(res.data.userdata.role));
-        AsyncStorage.setItem("isLoggedIn", "1");
+        AsyncStorage.setItem('email', res.data.userdata.email);
+        AsyncStorage.setItem('password', res.data.userdata.password);
+        AsyncStorage.setItem('role', JSON.stringify(res.data.userdata.role));
+        AsyncStorage.setItem('isLoggedIn', '1');
 
         // Reset route
         navigation.reset({
           index: 0,
-          routes: [{ name: "Tabs" }],
+          routes: [{name: 'Tabs'}],
         });
-      } else if (res.data.msg == "error-verification") {
-        Alert.alert("Login Failed", "Email belum diverifikasi");
+      } else if (res.data.msg == 'error-verification') {
+        Alert.alert('Login Failed', 'Email belum diverifikasi');
       } else {
-        Alert.alert("Login Failed", "Username/Password salah");
+        Alert.alert('Login Failed', 'Username/Password salah');
       }
     });
   };
 
+  function FocusAwareStatusBar() {
+    const isFocused = useIsFocused();
+
+    return isFocused ? (
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+    ) : null;
+  }
+
   return (
     <View style={styles.container}>
+      <FocusAwareStatusBar />
       <Text style={styles.title}>Login</Text>
       <Input
         inputContainerStyle={styles.input}
@@ -101,41 +112,50 @@ const LoginScreen = ({ navigation }) => {
       <Button
         mode="contained"
         color="#FF8195"
-        labelStyle={{ color: "#fff" }}
-        style={{ elevation: 0 }}
+        labelStyle={{color: '#fff'}}
+        style={{elevation: 0}}
         onPress={submitData}>
         Login
       </Button>
-      <View style={{ flexDirection: "row", marginTop: 50 }}>
-        <Text>Belum Punya Akun? </Text>
+      <View style={{marginTop: 50}}>
         <TouchableOpacity
-          onPress={() => Linking.openURL("http://10.0.2.2:8000/register")}>
-          <Text style={{ color: "#FF8195" }}>Daftar</Text>
+          style={{
+            marginBottom: 8,
+            alignItems: 'center',
+          }}
+          onPress={() => Linking.openURL(url + '/forgot-password')}>
+          <Text style={{color: '#FF8195'}}>Lupa Password?</Text>
         </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <Text>Belum Punya Akun? </Text>
+          <TouchableOpacity onPress={() => Linking.openURL(url + '/register')}>
+            <Text style={{color: '#FF8195'}}>Daftar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
 
-let deviceWidth = Dimensions.get("window").width;
-let deviceHeight = Dimensions.get("window").height;
+let deviceWidth = Dimensions.get('window').width;
+let deviceHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     width: deviceWidth,
     height: deviceHeight,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingHorizontal: 24,
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 90,
   },
   input: {
-    borderColor: "#eee",
+    borderColor: '#eee',
     borderWidth: 1,
     borderRadius: 24,
     paddingHorizontal: 16,

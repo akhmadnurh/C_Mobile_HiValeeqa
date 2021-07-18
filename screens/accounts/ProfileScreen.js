@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { View, StyleSheet, Text, StatusBar, Button, TouchableOpacity, Alert } from "react-native";
 import { useIsFocused } from "@react-navigation/core";
-import { Avatar } from "react-native-paper";
+import { Avatar, RadioButton } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Input } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
@@ -79,11 +79,11 @@ function ProfileScreen({ navigation }) {
       console.log(err);
     }
   };
-
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={{ backgroundColor: "#e87c80" }}>
+      <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
       <View style={styles.containerAvatar}>
         <Avatar.Icon icon="folder" size={80} />
       </View>
@@ -136,22 +136,23 @@ function ProfileScreen({ navigation }) {
           value={noHP} onChangeText={(value) => setNoHP(value)}
         />
       </View>
-      <View style={styles.container}>
-        <Input
-          label="Jenis Kelamin"
-          disabled={true}
-          disabledInputStyle={{
-            color: "#000",
-            fontWeight: "normal",
-            fontSize: 18,
-          }}
-          labelStyle={{ color: "#dedede" }}
-          inputContainerStyle={{
-            borderBottomColor: "#fff",
-            paddingBottom: 0,
-          }}
-          value="Laki - Laki"
-        />
+      <View
+        style={[styles.container, { paddingHorizontal: 20, paddingBottom: 30 }]}>
+        <View>
+          <Text style={styles.label}>Jenis Kelamin</Text>
+          <RadioButton.Group
+            onValueChange={value => setGender(value)}
+            value={gender}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <RadioButton color="#e87c80" value="L" />
+              <Text>Laki - Laki</Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <RadioButton color="#e87c80" value="P" />
+              <Text>Perempuan</Text>
+            </View>
+          </RadioButton.Group>
+        </View>
       </View>
     </ScrollView>
   );
@@ -176,6 +177,7 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: "bold",
     color: "#dedede",
+    marginBottom: 8,
   },
   curves: {
     height: 40,
