@@ -1,9 +1,9 @@
 import React from 'react';
+import {TouchableOpacity, Text} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {IconButton} from 'react-native-paper';
-import {useIsFocused} from '@react-navigation/core';
 
 import HomeScreen from './HomeScreen';
 import OrderScreen from './OrderScreen';
@@ -11,6 +11,8 @@ import WishlistScreen from './WishlistScreen';
 import DetailScreen from './DetailScreen';
 import AccountScreen from './AccountScreen';
 import LoginScreen from './LoginScreen';
+import ProfileScreen from './accounts/ProfileScreen';
+import SplashScreen from './SplashScreen';
 
 const HomeStack = createStackNavigator();
 const DetailStack = createStackNavigator();
@@ -20,7 +22,8 @@ const Stack = createStackNavigator();
 
 const MainTabScreen = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName="Tabs">
+    <Stack.Navigator headerMode="none" initialRouteName="Login">
+      <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Tabs" component={TabScreen} />
       <Stack.Screen name="Detail" component={DetailStackScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
@@ -126,6 +129,21 @@ const AccountStackScreen = () => (
       component={AccountScreen}
       options={{
         title: 'Akun',
+      }}
+    />
+    <AccountStack.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        title: 'Profil',
+        headerRight: () => (
+          <TouchableOpacity>
+            <Text style={{color: '#fff'}}>Simpan</Text>
+          </TouchableOpacity>
+        ),
+        headerRightContainerStyle: {
+          marginEnd: 20,
+        },
       }}
     />
   </AccountStack.Navigator>
