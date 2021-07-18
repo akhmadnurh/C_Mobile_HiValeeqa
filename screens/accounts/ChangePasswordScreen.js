@@ -2,7 +2,6 @@ import React from 'react';
 import {View, StyleSheet, StatusBar} from 'react-native';
 import {Input} from 'react-native-elements';
 import {useIsFocused} from '@react-navigation/core';
-import {ScrollView} from 'react-native-gesture-handler';
 
 function FocusAwareStatusBar() {
   const isFocused = useIsFocused();
@@ -14,40 +13,39 @@ function FocusAwareStatusBar() {
 
 function ChangePasswordScreen() {
   return (
-    <ScrollView>
+    <View style={{backgroundColor: '#e87c80'}}>
       <FocusAwareStatusBar />
-      <View style={{backgroundColor: '#e87c80'}}>
-        <View style={{height: 40}} />
-        <View style={styles.curves} />
-        <View style={styles.container}>
-          <Input
-            label="Password Saat Ini"
-            labelStyle={{color: '#dedede'}}
-            inputContainerStyle={{
-              borderBottomColor: '#dedede',
-            }}
-          />
-        </View>
-        <View style={styles.container}>
-          <Input
-            label="Password Baru"
-            labelStyle={{color: '#dedede'}}
-            inputContainerStyle={{
-              borderBottomColor: '#dedede',
-            }}
-          />
-        </View>
-        <View style={styles.container}>
-          <Input
-            label="Konfirmasi Password Baru"
-            labelStyle={{color: '#dedede'}}
-            inputContainerStyle={{
-              borderBottomColor: '#dedede',
-            }}
-          />
-        </View>
+      <View style={{height: 40}} />
+      <View style={styles.curves} />
+      <View style={styles.container}>
+        <Input
+          label="Password Saat Ini"
+          labelStyle={{color: '#000'}}
+          inputContainerStyle={{
+            borderBottomColor: '#dedede',
+          }}
+        />
       </View>
-    </ScrollView>
+      <View style={styles.container}>
+        <Input
+          label="Password Baru"
+          labelStyle={{color: '#000'}}
+          inputContainerStyle={{
+            borderBottomColor: '#dedede',
+          }}
+        />
+      </View>
+      <View style={styles.container}>
+        <Input
+          label="Konfirmasi Password Baru"
+          labelStyle={{color: '#000'}}
+          inputContainerStyle={{
+            borderBottomColor: '#dedede',
+          }}
+        />
+      </View>
+      <View style={{backgroundColor: '#fff', height: 200}} />
+    </View>
   );
 }
 

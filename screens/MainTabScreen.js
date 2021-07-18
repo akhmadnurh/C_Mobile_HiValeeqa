@@ -1,8 +1,9 @@
 import React from 'react';
-import {TouchableOpacity, Text} from 'react-native';
+import {TouchableOpacity, Text, View, Pressable} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icons from 'react-native-vector-icons/Ionicons';
+import {Badge} from 'react-native-elements';
 import {IconButton} from 'react-native-paper';
 
 import HomeScreen from './HomeScreen';
@@ -46,7 +47,7 @@ const TabScreen = () => (
       component={HomeStackScreen}
       options={{
         tabBarLabel: 'Beranda',
-        tabBarIcon: ({color}) => <Icon name="home" color={color} size={24} />,
+        tabBarIcon: ({color}) => <Icons name="home" color={color} size={24} />,
       }}
     />
     <Tab.Screen
@@ -55,7 +56,7 @@ const TabScreen = () => (
       options={{
         tabBarLabel: 'Pesanan',
         tabBarIcon: ({color}) => (
-          <Icon name="receipt" color={color} size={24} />
+          <Icons name="receipt" color={color} size={24} />
         ),
       }}
     />
@@ -64,7 +65,7 @@ const TabScreen = () => (
       component={WishlistScreen}
       options={{
         tabBarLabel: 'Wishlist',
-        tabBarIcon: ({color}) => <Icon name="heart" color={color} size={24} />,
+        tabBarIcon: ({color}) => <Icons name="heart" color={color} size={24} />,
       }}
     />
     <Tab.Screen
@@ -72,37 +73,55 @@ const TabScreen = () => (
       component={AccountStackScreen}
       options={{
         tabBarLabel: 'Akun',
-        tabBarIcon: ({color}) => <Icon name="person" color={color} size={24} />,
+        tabBarIcon: ({color}) => (
+          <Icons name="person" color={color} size={24} />
+        ),
       }}
     />
   </Tab.Navigator>
 );
 
-const HomeStackScreen = () => (
-  <HomeStack.Navigator
-    screenOptions={{
-      headerStyle: {backgroundColor: '#fff', elevation: 2},
-      headerTintColor: '#000',
-    }}>
-    <HomeStack.Screen
-      name="Home"
-      component={HomeScreen}
-      options={{
-        title: 'HI VALEEQA',
-        headerTitleStyle: {fontWeight: '700'},
-        headerRight: () => (
-          <IconButton
-            icon="basket"
-            size={26}
-            color="#e87c80"
-            style={{paddingEnd: 0, backgroundColor: '#fff'}}
-            onPress={() => console.log('Pressed')}
-          />
-        ),
-      }}
-    />
-  </HomeStack.Navigator>
-);
+const HomeStackScreen = () => {
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: '#fff', elevation: 2},
+        headerTintColor: '#000',
+      }}>
+      <HomeStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: 'HI VALEEQA',
+          headerTitleStyle: {fontWeight: '700'},
+          headerRight: () => (
+            <View>
+              <IconButton
+                icon="basket"
+                size={26}
+                color="#e87c80"
+                style={{paddingEnd: 0, backgroundColor: '#fff'}}
+                onPress={() => console.log('Pressed')}
+              />
+              <Badge
+                value="99+"
+                badgeStyle={{backgroundColor: '#000'}}
+                containerStyle={{
+                  position: 'absolute',
+                  top: 9,
+                  right: 1,
+                }}
+              />
+            </View>
+          ),
+          headerRightContainerStyle: {
+            paddingEnd: 20,
+          },
+        }}
+      />
+    </HomeStack.Navigator>
+  );
+};
 
 const DetailStackScreen = () => (
   <DetailStack.Navigator

@@ -76,6 +76,7 @@ function AddressScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    paddingHorizontal: 10,
     backgroundColor: '#fff',
     paddingBottom: 16,
   },
