@@ -1,16 +1,24 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet, Text, Image, Dimensions} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect } from "react";
+import { View, StyleSheet, Text, Image, Dimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function SplashScreen() {
+function SplashScreen({ navigation }) {
   useEffect(() => {
     try {
       const isLoggedIn = async () => {
-        const value = await AsyncStorage.getItem('isLoggedIn');
+        const value = await AsyncStorage.getItem("isLoggedIn");
         if (value !== null) {
-          navigation.navigate('Tabs');
+          // Reset route
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "Tabs" }],
+          });
         } else {
-          navigation.navigate('Login');
+          // Reset route
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "Login" }],
+          });
         }
       };
       isLoggedIn();
@@ -22,28 +30,28 @@ function SplashScreen() {
   return (
     <View style={styles.container}>
       <Image
-        style={{width: 130, height: 103}}
-        source={require('../images/hi-valeeqa.png')}
+        style={{ width: 130, height: 103 }}
+        source={require("../images/hi-valeeqa.png")}
       />
       <Text style={styles.title}>HI VALEEQA</Text>
     </View>
   );
 }
 
-let deviceWidth = Dimensions.get('window').width;
-let deviceHeight = Dimensions.get('window').height;
+let deviceWidth = Dimensions.get("window").width;
+let deviceHeight = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
   container: {
     height: deviceHeight,
     width: deviceWidth,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
   },
   title: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 24,
     marginTop: 24,
   },

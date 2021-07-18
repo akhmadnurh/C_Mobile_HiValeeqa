@@ -11,7 +11,7 @@ import WishlistScreen from './WishlistScreen';
 import DetailScreen from './DetailScreen';
 import AccountScreen from './AccountScreen';
 import LoginScreen from './LoginScreen';
-import ProfileScreen from './accounts/ProfileScreen';
+// import ProfileScreen from './accounts/ProfileScreen';
 import SplashScreen from './SplashScreen';
 
 const HomeStack = createStackNavigator();
@@ -22,7 +22,7 @@ const Stack = createStackNavigator();
 
 const MainTabScreen = () => {
   return (
-    <Stack.Navigator headerMode="none" initialRouteName="Login">
+    <Stack.Navigator headerMode="none" initialRouteName="Splash">
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Tabs" component={TabScreen} />
       <Stack.Screen name="Detail" component={DetailStackScreen} />
@@ -131,20 +131,20 @@ const AccountStackScreen = () => (
         title: 'Akun',
       }}
     />
-    <AccountStack.Screen
-      name="Profile"
-      component={ProfileScreen}
-      options={{
-        title: 'Profil',
-        headerRight: () => (
-          <TouchableOpacity>
-            <Text style={{color: '#fff'}}>Simpan</Text>
-          </TouchableOpacity>
-        ),
-        headerRightContainerStyle: {
-          marginEnd: 20,
-        },
-      }}
-    />
+    {/*<AccountStack.Screen*/}
+    {/*  name="Profile"*/}
+    {/*  component={ProfileScreen}*/}
+    {/*  options={{*/}
+    {/*    title: 'Profil',*/}
+    {/*    headerRight: () => (*/}
+    {/*      <TouchableOpacity>*/}
+    {/*        <Text style={{color: '#fff'}}>Simpan</Text>*/}
+    {/*      </TouchableOpacity>*/}
+    {/*    ),*/}
+    {/*    headerRightContainerStyle: {*/}
+    {/*      marginEnd: 20,*/}
+    {/*    },*/}
+    {/*  }}*/}
+    {/*/>*/}
   </AccountStack.Navigator>
 );

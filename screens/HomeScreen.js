@@ -27,6 +27,9 @@ function HomeScreen({ navigation }) {
         setData(res.data.products);
       });
     });
+
+
+
     return unsubscribe;
   }, []);
 
