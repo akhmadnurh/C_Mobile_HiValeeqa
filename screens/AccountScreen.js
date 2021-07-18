@@ -15,6 +15,7 @@ import {Avatar} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import url from "../url";
 
 function FocusAwareStatusBar(props) {
   const isFocused = useIsFocused();
@@ -39,7 +40,7 @@ function AccountScreen({navigation}) {
             user_id: JSON.parse(user_id),
           };
           axios
-            .get('http://10.0.2.2:8000/api/profile', {params: data})
+            .get(url+'/api/profile', {params: data})
             .then(res => {
               setUserdata(res.data.user);
               console.log(res.data.user);

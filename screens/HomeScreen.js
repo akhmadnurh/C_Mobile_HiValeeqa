@@ -10,7 +10,7 @@ import {
 import { Card } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/core";
-
+import url from "../url";
 import axios from "axios";
 
 function FocusAwareStatusBar(props) {
@@ -23,7 +23,7 @@ function HomeScreen({ navigation }) {
   const [data, setData] = useState();
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      axios.get("http://10.0.2.2:8000/api/shop").then(res => {
+      axios.get(url+"/api/shop").then(res => {
         setData(res.data.products);
       });
     });
@@ -61,7 +61,7 @@ function HomeScreen({ navigation }) {
               }>
               <Card.Image
                 style={{ width: 120, borderRadius: 10 }}
-                source={{ uri: "http://10.0.2.2:8000/img/produk/" + item.image }}
+                source={{ uri: url+"/img/produk/" + item.image }}
               />
               <Card.Title style={{ marginTop: 8, marginBottom: 0 }}>
                 {item.product_name}
