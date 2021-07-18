@@ -11,7 +11,9 @@ import WishlistScreen from './WishlistScreen';
 import DetailScreen from './DetailScreen';
 import AccountScreen from './AccountScreen';
 import LoginScreen from './LoginScreen';
-// import ProfileScreen from './accounts/ProfileScreen';
+import ProfileScreen from './accounts/ProfileScreen';
+import AddressScreen from './accounts/AddressScreen';
+import ChangePasswordScreen from './accounts/ChangePasswordScreen';
 import SplashScreen from './SplashScreen';
 
 const HomeStack = createStackNavigator();
@@ -131,20 +133,50 @@ const AccountStackScreen = () => (
         title: 'Akun',
       }}
     />
-    {/*<AccountStack.Screen*/}
-    {/*  name="Profile"*/}
-    {/*  component={ProfileScreen}*/}
-    {/*  options={{*/}
-    {/*    title: 'Profil',*/}
-    {/*    headerRight: () => (*/}
-    {/*      <TouchableOpacity>*/}
-    {/*        <Text style={{color: '#fff'}}>Simpan</Text>*/}
-    {/*      </TouchableOpacity>*/}
-    {/*    ),*/}
-    {/*    headerRightContainerStyle: {*/}
-    {/*      marginEnd: 20,*/}
-    {/*    },*/}
-    {/*  }}*/}
-    {/*/>*/}
+    <AccountStack.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        title: 'Profil',
+        headerRight: () => (
+          <TouchableOpacity>
+            <Text style={{color: '#fff'}}>Simpan</Text>
+          </TouchableOpacity>
+        ),
+        headerRightContainerStyle: {
+          marginEnd: 20,
+        },
+      }}
+    />
+    <AccountStack.Screen
+      name="Address"
+      component={AddressScreen}
+      options={{
+        title: 'Alamat Pengiriman',
+        headerRight: () => (
+          <TouchableOpacity>
+            <Text style={{color: '#fff'}}>Simpan</Text>
+          </TouchableOpacity>
+        ),
+        headerRightContainerStyle: {
+          marginEnd: 20,
+        },
+      }}
+    />
+    <AccountStack.Screen
+      name="ChangePassword"
+      component={ChangePasswordScreen}
+      options={{
+        title: 'Ganti Password',
+        headerRight: () => (
+          <TouchableOpacity>
+            <Text style={{color: '#fff'}}>Simpan</Text>
+          </TouchableOpacity>
+        ),
+        headerRightContainerStyle: {
+          marginEnd: 20,
+        },
+      }}
+    />
   </AccountStack.Navigator>
 );

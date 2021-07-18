@@ -80,21 +80,21 @@ function AccountScreen({navigation}) {
       <View style={styles.curves} />
       <Pressable
         style={styles.list}
-        onPress={pressContoh}
+        onPress={() => navigation.navigate('Profile')}
         android_ripple="#eee">
         <Text>Profil</Text>
         <Icon name="chevron-forward-outline" size={22} color="#dedede" />
       </Pressable>
       <Pressable
         style={styles.list}
-        onPress={pressContoh}
+        onPress={() => navigation.navigate('Address')}
         android_ripple="#eee">
         <Text>Alamat Pengiriman</Text>
         <Icon name="chevron-forward-outline" size={22} color="#dedede" />
       </Pressable>
       <Pressable
         style={styles.list}
-        onPress={pressContoh}
+        onPress={() => navigation.navigate('ChangePassword')}
         android_ripple="#eee">
         <Text>Ganti Password</Text>
       </Pressable>
