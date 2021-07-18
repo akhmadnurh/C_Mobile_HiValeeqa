@@ -57,11 +57,16 @@ function AccountScreen({navigation}) {
 
   const logout = () => {
     AsyncStorage.clear();
-    navigation.dispatch(LogoutReset);
-  };
-
-  const pressContoh = () => {
-    return Alert.alert('Ini contoh', 'Berhasih di klik');
+    Alert.alert('Logout', 'Apakah anda yakin ingin Logout?', [
+      {
+        text: 'Batal',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        onPress: () => navigation.dispatch(LogoutReset),
+      },
+    ]);
   };
 
   return (

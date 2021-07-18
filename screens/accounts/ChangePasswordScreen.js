@@ -1,16 +1,21 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import {Input} from 'react-native-elements';
-import {
-  ScrollView,
-  NativeViewGestureHandler,
-  PanGestureHandler,
-  TapGestureHandler,
-} from 'react-native-gesture-handler';
+import {useIsFocused} from '@react-navigation/core';
+import {ScrollView} from 'react-native-gesture-handler';
+
+function FocusAwareStatusBar() {
+  const isFocused = useIsFocused();
+
+  return isFocused ? (
+    <StatusBar barStyle="light-content" backgroundColor="#e87c80" />
+  ) : null;
+}
 
 function ChangePasswordScreen() {
   return (
     <ScrollView>
+      <FocusAwareStatusBar />
       <View style={{backgroundColor: '#e87c80'}}>
         <View style={{height: 40}} />
         <View style={styles.curves} />
