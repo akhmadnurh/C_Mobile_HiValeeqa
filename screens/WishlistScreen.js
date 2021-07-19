@@ -74,7 +74,7 @@ function WishlistItem() {
               radius: 30,
               borderless: true,
             }}>
-            <Icon name="shopping" size={26} color="#e87c80" />
+            <Icon name="shopping-outline" size={26} color="#e87c80" />
             <Badge
               value="+"
               textStyle={{color: '#e87c80', fontWeight: 'bold'}}

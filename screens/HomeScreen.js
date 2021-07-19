@@ -48,7 +48,7 @@ function HomeScreen({navigation}) {
         headerRight: () => (
           <View>
             <IconButton
-              icon="shopping"
+              icon="shopping-outline"
               size={26}
               color="#e87c80"
               style={{paddingEnd: 0, backgroundColor: '#fff'}}

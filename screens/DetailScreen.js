@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet, Alert} from 'react-native';
+import {View, Text, Image, StyleSheet, Alert, ToastAndroid} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Button} from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import url from '../global/url';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const DetailScreen = ({route, navigation}) => {
   const {product_id} = route.params;
@@ -50,6 +51,11 @@ const DetailScreen = ({route, navigation}) => {
         .get('http://10.0.2.2:8000/api/wishlist/' + product_id, {params: data})
         .then(res => {
           setWishlist(res.data.status);
+          ToastAndroid.showWithGravity(
+            'Berhasil ditambahkan ke Wishlist',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
         });
     } catch (e) {
       console.warn(e.message);
@@ -68,97 +74,93 @@ const DetailScreen = ({route, navigation}) => {
         })
         .then(res => {
           setWishlist(res.data.status);
+          ToastAndroid.showWithGravity(
+            'Berhasil dihapus dari Wishlist',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
         });
     } catch (e) {
       console.warn(e.message);
     }
   };
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.img}>
-        <Image
-          resizeMode="cover"
-          style={{width: 200, height: 300}}
-          source={{uri: 'http://10.0.2.2:8000/img/produk/' + product.image}}
-        />
-      </View>
-      <View style={styles.title}>
-        <Text style={{fontSize: 24, fontWeight: '700'}}>
-          Rp {product.price}
-        </Text>
-        <Text style={{fontSize: 16, fontWeight: '600', marginTop: 4}}>
-          {product.product_name}
-        </Text>
-      </View>
-      <View style={styles.description}>
-        <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 16}}>
-          Detail Produk
-        </Text>
-        <View style={styles.list}>
-          <Text style={styles.listTitle}>Bahan</Text>
-          <Text style={styles.listText}>{product.material}</Text>
+    <View style={{flex: 1}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.img}>
+          <Image
+            resizeMode="cover"
+            style={{width: 200, height: 300}}
+            source={{uri: 'http://10.0.2.2:8000/img/produk/' + product.image}}
+          />
         </View>
-        <View style={styles.list}>
-          <Text style={styles.listTitle}>Warna</Text>
-          <Text style={styles.listText}>{product.color}</Text>
+        <View style={styles.title}>
+          <Text style={{fontSize: 24, fontWeight: '700'}}>
+            Rp {product.price}
+          </Text>
+          <Text style={{fontSize: 16, fontWeight: '600', marginTop: 4}}>
+            {product.product_name}
+          </Text>
         </View>
-        <View style={styles.list}>
-          <Text style={styles.listTitle}>Stok</Text>
-          <Text style={styles.listText}>{product.stock}</Text>
+        <View style={styles.description}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 16}}>
+            Detail Produk
+          </Text>
+          <View style={styles.list}>
+            <Text style={styles.listTitle}>Bahan</Text>
+            <Text style={styles.listText}>{product.material}</Text>
+          </View>
+          <View style={styles.list}>
+            <Text style={styles.listTitle}>Warna</Text>
+            <Text style={styles.listText}>{product.color}</Text>
+          </View>
+          <View style={styles.list}>
+            <Text style={styles.listTitle}>Stok</Text>
+            <Text style={styles.listText}>{product.stock}</Text>
+          </View>
+          <View>
+            <Text style={styles.describeExtra}>{product.description}</Text>
+          </View>
         </View>
-        <View>
-          <Text style={styles.describeExtra}>{product.description}</Text>
-        </View>
-        <View
-          style={{
-            marginHorizontal: 8,
-            marginVertical: 16,
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          {wishlist == 0 ? (
-            <Button
-              icon="heart"
-              mode="outlined"
-              color="#e87c80"
-              style={{
-                borderRadius: 8,
-                marginRight: 8,
-                justifyContent: 'center',
-                borderColor: '#FF8195',
-              }}
-              onPress={addWishlist}>
-              Wishlist
-            </Button>
-          ) : (
-            <Button
-              icon="heart"
-              mode="outlined"
-              color="#e87c80"
-              style={{
-                borderRadius: 8,
-                marginRight: 8,
-                justifyContent: 'center',
-                borderColor: '#e87c80',
-              }}
-              onPress={removeWishlist}>
-              Wishlisted
-            </Button>
-          )}
-
+      </ScrollView>
+      <View style={styles.containerBtn}>
+        <Button
+          mode="contained"
+          color="#e87c80"
+          labelStyle={{color: '#fff'}}
+          style={{borderRadius: 8, flex: 0.8, elevation: 0}}
+          onPress={() => Alert.alert('clicked')}>
+          Add to Cart
+        </Button>
+        {wishlist == 0 ? (
           <Button
-            mode="contained"
+            mode="outlined"
             color="#e87c80"
-            labelStyle={{color: '#fff'}}
-            style={{borderRadius: 8, flex: 0.8, elevation: 0}}
-            onPress={() => Alert.alert('clicked')}>
-            Add to Cart
+            style={{
+              borderRadius: 8,
+              marginStart: 8,
+              justifyContent: 'center',
+              borderColor: '#FF8195',
+            }}
+            onPress={addWishlist}>
+            <Icon name="heart-outline" size={24} />
           </Button>
-        </View>
+        ) : (
+          <Button
+            mode="outlined"
+            color="#e87c80"
+            style={{
+              borderRadius: 8,
+              marginStart: 8,
+              justifyContent: 'center',
+              borderColor: '#e87c80',
+            }}
+            onPress={removeWishlist}>
+            <Icon name="heart" size={24} />
+          </Button>
+        )}
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -197,6 +199,14 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingVertical: 16,
     paddingHorizontal: 16,
+  },
+  containerBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 12,
+    elevation: 5,
   },
 });
 

@@ -115,6 +115,29 @@ const DetailStackScreen = () => (
       component={DetailScreen}
       options={{
         title: 'Detail',
+        headerRight: () => (
+          <View>
+            <IconButton
+              icon="shopping-outline"
+              size={26}
+              color="#e87c80"
+              style={{paddingEnd: 0, backgroundColor: '#fff'}}
+              onPress={() => console.log('Pressed')}
+            />
+            <Badge
+              value="22"
+              badgeStyle={{backgroundColor: '#000'}}
+              containerStyle={{
+                position: 'absolute',
+                top: 9,
+                right: 1,
+              }}
+            />
+          </View>
+        ),
+        headerRightContainerStyle: {
+          paddingEnd: 20,
+        },
       }}
     />
   </DetailStack.Navigator>
@@ -183,7 +206,7 @@ const WishlistStackScreen = () => (
         headerRight: () => (
           <View>
             <IconButton
-              icon="shopping"
+              icon="shopping-outline"
               size={26}
               color="#fff"
               style={{paddingEnd: 0, backgroundColor: '#e87c80'}}

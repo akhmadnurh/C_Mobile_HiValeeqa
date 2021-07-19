@@ -1,26 +1,11 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-  Text,
-  Alert,
-} from 'react-native';
-import {useIsFocused} from '@react-navigation/core';
+import {View, StyleSheet, TouchableOpacity, Text, Alert} from 'react-native';
 import {Input} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
 import axios from 'axios';
 import url from '../../global/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-function FocusAwareStatusBar() {
-  const isFocused = useIsFocused();
-
-  return isFocused ? (
-    <StatusBar barStyle="light-content" backgroundColor="#e87c80" />
-  ) : null;
-}
+import {FocusAwareStatusBar} from '../../global/component';
 
 function AddressScreen({navigation}) {
   const [userId, setUserId] = useState('');
@@ -96,7 +81,7 @@ function AddressScreen({navigation}) {
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={{backgroundColor: '#e87c80'}}>
-      <FocusAwareStatusBar />
+      <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
       <View style={{height: 40}} />
       <View style={styles.curves} />
       <View style={styles.container}>
