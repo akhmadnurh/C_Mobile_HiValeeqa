@@ -4,7 +4,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Button} from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import url from "../url";
+import url from '../global/url';
 
 const DetailScreen = ({route, navigation}) => {
   const {product_id} = route.params;
@@ -21,7 +21,7 @@ const DetailScreen = ({route, navigation}) => {
             user_id: user_id,
           };
           axios
-            .get(url+'/api/detail/' + product_id, {
+            .get(url + '/api/detail/' + product_id, {
               params: data,
             })
             .then(res => {

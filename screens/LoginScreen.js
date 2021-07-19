@@ -16,7 +16,7 @@ import {CommonActions} from '@react-navigation/routers';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import url from '../url';
+import url from '../global/url';
 
 const resetAction = CommonActions.reset({
   index: 1,

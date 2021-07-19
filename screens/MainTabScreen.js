@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {IconButton} from 'react-native-paper';
+import {Badge} from 'react-native-elements';
 
 import HomeScreen from './HomeScreen';
 import OrderScreen from './OrderScreen';
@@ -19,6 +20,7 @@ import SplashScreen from './SplashScreen';
 const HomeStack = createStackNavigator();
 const DetailStack = createStackNavigator();
 const AccountStack = createStackNavigator();
+const WishlistStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -61,7 +63,7 @@ const TabScreen = () => (
     />
     <Tab.Screen
       name="Wishlist"
-      component={WishlistScreen}
+      component={WishlistStackScreen}
       options={{
         tabBarLabel: 'Wishlist',
         tabBarIcon: ({color}) => <Icons name="heart" color={color} size={24} />,
@@ -162,4 +164,43 @@ const AccountStackScreen = () => (
       }}
     />
   </AccountStack.Navigator>
+);
+
+const WishlistStackScreen = () => (
+  <WishlistStack.Navigator
+    screenOptions={{
+      headerStyle: {backgroundColor: '#e87c80', elevation: 0},
+      headerTintColor: '#fff',
+    }}>
+    <WishlistStack.Screen
+      name="WishlistScreen"
+      component={WishlistScreen}
+      options={{
+        title: 'Wishlist',
+        headerRightContainerStyle: {
+          marginEnd: 20,
+        },
+        headerRight: () => (
+          <View>
+            <IconButton
+              icon="shopping"
+              size={26}
+              color="#fff"
+              style={{paddingEnd: 0, backgroundColor: '#e87c80'}}
+              onPress={() => console.log('Pressed')}
+            />
+            <Badge
+              value="99"
+              badgeStyle={{backgroundColor: '#000'}}
+              containerStyle={{
+                position: 'absolute',
+                top: 9,
+                right: 1,
+              }}
+            />
+          </View>
+        ),
+      }}
+    />
+  </WishlistStack.Navigator>
 );
