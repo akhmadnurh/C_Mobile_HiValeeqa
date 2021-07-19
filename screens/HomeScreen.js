@@ -13,6 +13,7 @@ import { useIsFocused } from "@react-navigation/core";
 import url from "../url";
 import axios from "axios";
 import { IconButton } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function FocusAwareStatusBar(props) {
   const isFocused = useIsFocused();
@@ -21,48 +22,62 @@ function FocusAwareStatusBar(props) {
 }
 
 function HomeScreen({ navigation }) {
-  const [data, setData] = useState();
-  const [cart, setCart] = useState();
+  const [data, setData] = useState("");
+  const [cart, setCart] = useState("");
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      axios.get(url + "/api/shop").then(res => {
-        setData(res.data.products);
-        setCart(res.data.cart);
-      });
+      const getProducts = async () => {
+        const id = await AsyncStorage.getItem("user_id");
+        const data = {
+          user_id: id,
+        };
+        try {
+          axios.get(url + "/api/shop", { params: data }).then(res => {
+            setData(res.data.products);
+            setCart(res.data.cart);
+          });
+        } catch (e) {
+          console.warn(e);
+        }
+      };
+
+      getProducts();
     });
     return unsubscribe;
   }, []);
 
   // Badge
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View>
-          <IconButton
-            icon="basket"
-            size={26}
-            color="#e87c80"
-            style={{ paddingEnd: 0, backgroundColor: "#fff" }}
-            onPress={() => console.log("Pressed")}
-          />
-          {
-            cart > 0 ?
-              (<Badge
-                value={cart}
-                badgeStyle={{ backgroundColor: "#000" }}
-                containerStyle={{
-                  position: "absolute",
-                  top: 9,
-                  right: 1,
-                }}
-              />) : (
-                <View></View>
-              )
-          }
-
-        </View>
-      ),
+    const unsubscribe = navigation.addListener("focus", () => {
+      navigation.setOptions({
+        headerRight: () => (
+          <View>
+            <IconButton
+              icon="basket"
+              size={26}
+              color="#e87c80"
+              style={{ paddingEnd: 0, backgroundColor: "#fff" }}
+              onPress={() => console.log("Pressed")}
+            />
+            {
+              cart > 0 ?
+                (<Badge
+                  value={cart}
+                  badgeStyle={{ backgroundColor: "#000" }}
+                  containerStyle={{
+                    position: "absolute",
+                    top: 9,
+                    right: 1,
+                  }}
+                />) : (
+                  <View></View>
+                )
+            }
+          </View>
+        ),
+      });
     });
+    return unsubscribe;
   });
 
   return (

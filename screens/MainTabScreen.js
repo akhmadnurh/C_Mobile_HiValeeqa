@@ -146,11 +146,6 @@ const AccountStackScreen = () => (
       component={AddressScreen}
       options={{
         title: 'Alamat Pengiriman',
-        headerRight: () => (
-          <TouchableOpacity>
-            <Text style={{color: '#fff'}}>Simpan</Text>
-          </TouchableOpacity>
-        ),
         headerRightContainerStyle: {
           marginEnd: 20,
         },
