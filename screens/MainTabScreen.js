@@ -161,11 +161,6 @@ const AccountStackScreen = () => (
       component={ChangePasswordScreen}
       options={{
         title: 'Ganti Password',
-        headerRight: () => (
-          <TouchableOpacity>
-            <Text style={{color: '#fff'}}>Simpan</Text>
-          </TouchableOpacity>
-        ),
         headerRightContainerStyle: {
           marginEnd: 20,
         },
