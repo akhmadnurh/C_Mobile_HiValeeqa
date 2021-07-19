@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,12 @@ import {
   Pressable,
   StatusBar,
 } from "react-native";
-import { Card } from "react-native-elements";
+import { Badge, Card } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/core";
 import url from "../url";
 import axios from "axios";
+import { IconButton } from "react-native-paper";
 
 function FocusAwareStatusBar(props) {
   const isFocused = useIsFocused();
@@ -21,17 +22,48 @@ function FocusAwareStatusBar(props) {
 
 function HomeScreen({ navigation }) {
   const [data, setData] = useState();
+  const [cart, setCart] = useState();
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      axios.get(url+"/api/shop").then(res => {
+      axios.get(url + "/api/shop").then(res => {
         setData(res.data.products);
+        setCart(res.data.cart);
       });
     });
-
-
-
     return unsubscribe;
   }, []);
+
+  // Badge
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View>
+          <IconButton
+            icon="basket"
+            size={26}
+            color="#e87c80"
+            style={{ paddingEnd: 0, backgroundColor: "#fff" }}
+            onPress={() => console.log("Pressed")}
+          />
+          {
+            cart > 0 ?
+              (<Badge
+                value={cart}
+                badgeStyle={{ backgroundColor: "#000" }}
+                containerStyle={{
+                  position: "absolute",
+                  top: 9,
+                  right: 1,
+                }}
+              />) : (
+                <View></View>
+              )
+          }
+
+        </View>
+      ),
+    });
+  });
 
   return (
     <SafeAreaView>
@@ -61,7 +93,7 @@ function HomeScreen({ navigation }) {
               }>
               <Card.Image
                 style={{ width: 120, borderRadius: 10 }}
-                source={{ uri: url+"/img/produk/" + item.image }}
+                source={{ uri: url + "/img/produk/" + item.image }}
               />
               <Card.Title style={{ marginTop: 8, marginBottom: 0 }}>
                 {item.product_name}

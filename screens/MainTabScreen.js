@@ -3,7 +3,6 @@ import {TouchableOpacity, Text, View, Pressable} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Icons from 'react-native-vector-icons/Ionicons';
-import {Badge} from 'react-native-elements';
 import {IconButton} from 'react-native-paper';
 
 import HomeScreen from './HomeScreen';
@@ -94,26 +93,6 @@ const HomeStackScreen = () => {
         options={{
           title: 'HI VALEEQA',
           headerTitleStyle: {fontWeight: '700'},
-          headerRight: () => (
-            <View>
-              <IconButton
-                icon="basket"
-                size={26}
-                color="#e87c80"
-                style={{paddingEnd: 0, backgroundColor: '#fff'}}
-                onPress={() => console.log('Pressed')}
-              />
-              <Badge
-                value="99+"
-                badgeStyle={{backgroundColor: '#000'}}
-                containerStyle={{
-                  position: 'absolute',
-                  top: 9,
-                  right: 1,
-                }}
-              />
-            </View>
-          ),
           headerRightContainerStyle: {
             paddingEnd: 20,
           },
