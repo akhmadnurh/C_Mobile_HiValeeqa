@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import url from '../global/url';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Badge} from 'react-native-elements';
+import {FocusAwareStatusBar} from '../global/component';
 
 const DetailScreen = ({route, navigation}) => {
   const {product_id} = route.params;
@@ -119,6 +120,7 @@ const DetailScreen = ({route, navigation}) => {
   };
   return (
     <View style={{flex: 1}}>
+      <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.img}>
           <Image

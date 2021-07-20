@@ -17,7 +17,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ScrollView} from 'react-native-gesture-handler';
 
-function CartScreen() {
+function CartScreen({navigation}) {
   return (
     <View style={{flex: 1}}>
       <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -40,11 +40,10 @@ function CartScreen() {
           </Button>
           <Button
             // card == empty ? disabled : hapus disabled
-            disabled
             mode="contained"
             color="#e87c80"
             labelStyle={{color: '#fff'}}
-            onPress={() => console.log('click')}
+            onPress={() => navigation.navigate('Checkout')}
             style={styles.btnCheckout}>
             Checkout
           </Button>
