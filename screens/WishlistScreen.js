@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity, Alert, ToastAndroid } from "react-native";
 import {
   FocusAwareStatusBar,
   deviceHeight,
@@ -53,15 +53,19 @@ function WishlistScreen({ navigation }) {
             style={{ paddingEnd: 0, backgroundColor: "#e87c80" }}
             onPress={() => console.log("Pressed")}
           />
-          <Badge
-            value={cart}
-            badgeStyle={{ backgroundColor: "#000" }}
-            containerStyle={{
-              position: "absolute",
-              top: 9,
-              right: 1,
-            }}
-          />
+          {cart > 0 ? (
+            <Badge
+              value={cart}
+              badgeStyle={{ backgroundColor: "#000" }}
+              containerStyle={{
+                position: "absolute",
+                top: 9,
+                right: 1,
+              }}
+            />
+          ) : (
+            <View></View>
+          )}
         </View>
       ),
     });
@@ -69,11 +73,12 @@ function WishlistScreen({ navigation }) {
 
   const updateProduct = (productId) => {
     const temp = products.filter((product) => {
-      return product.product_id != productId
-    })
+      return product.product_id != productId;
+    });
 
-    setProducts(temp)
-  }
+    setProducts(temp);
+    ToastAndroid.showWithGravity("Berhasil menghapus item dari Wishlist", ToastAndroid.SHORT, ToastAndroid.TOP);
+  };
   return (
     <View style={{ backgroundColor: "#fff" }}>
       <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
@@ -83,7 +88,8 @@ function WishlistScreen({ navigation }) {
         ) : (
           products.map((data, key) => {
             return (
-              <WishlistItem key={key} index={key} image={data.image} name={data.product_name} stock={data.stock} price={data.price}
+              <WishlistItem key={key} index={key} image={data.image} name={data.product_name} stock={data.stock}
+                            price={data.price}
                             productId={data.product_id} onPress={() => {
                 navigation.navigate("Detail", {
                   screen: "DetailScreen",
@@ -121,12 +127,12 @@ function WishlistItem(props) {
         })
         .then(res => {
           // setWishlist(res.data.status);
-          console.log('ok')
+          console.log("ok");
         });
     } catch (e) {
       console.warn(e.message);
     }
-    props.product(props.productId)
+    props.product(props.productId);
   };
 
   return (
@@ -171,7 +177,7 @@ function WishlistItem(props) {
               radius: 30,
               borderless: true,
             }}>
-            <Icon name="shopping" size={26} color="#e87c80" />
+            <Icon name="shopping-outline" size={26} color="#e87c80" />
             <Badge
               value="+"
               textStyle={{ color: "#e87c80", fontWeight: "bold" }}

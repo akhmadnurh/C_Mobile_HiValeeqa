@@ -1,25 +1,10 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-  Text,
-  Alert,
-} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text, Alert} from 'react-native';
 import {Input} from 'react-native-elements';
-import {useIsFocused} from '@react-navigation/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import url from '../../global/url';
-
-function FocusAwareStatusBar() {
-  const isFocused = useIsFocused();
-
-  return isFocused ? (
-    <StatusBar barStyle="light-content" backgroundColor="#e87c80" />
-  ) : null;
-}
+import {FocusAwareStatusBar} from '../../global/component';
 
 function ChangePasswordScreen({navigation}) {
   const [userId, setUserId] = useState('');
@@ -78,7 +63,7 @@ function ChangePasswordScreen({navigation}) {
 
   return (
     <View style={{backgroundColor: '#e87c80'}}>
-      <FocusAwareStatusBar />
+      <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
       <View style={{height: 40}} />
       <View style={styles.curves} />
       <View style={styles.container}>

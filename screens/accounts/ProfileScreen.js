@@ -16,12 +16,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import url from '../../global/url';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-function FocusAwareStatusBar(props) {
-  const isFocused = useIsFocused();
-
-  return isFocused ? <StatusBar {...props} /> : null;
-}
+import {FocusAwareStatusBar} from '../../global/component';
 
 function ProfileScreen({navigation}) {
   const [userdata, setUserdata] = useState('');

@@ -115,6 +115,9 @@ const DetailStackScreen = () => (
       component={DetailScreen}
       options={{
         title: 'Detail',
+        headerRightContainerStyle: {
+          paddingEnd: 20,
+        },
       }}
     />
   </DetailStack.Navigator>

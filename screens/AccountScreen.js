@@ -16,12 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import url from '../global/url';
-
-function FocusAwareStatusBar(props) {
-  const isFocused = useIsFocused();
-
-  return isFocused ? <StatusBar {...props} /> : null;
-}
+import {FocusAwareStatusBar} from '../global/component';
 
 const LogoutReset = CommonActions.reset({
   index: 1,

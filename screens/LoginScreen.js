@@ -7,16 +7,16 @@ import {
   Linking,
   TouchableOpacity,
   View,
-  StatusBar,
+  Image,
 } from 'react-native';
 import {Input} from 'react-native-elements';
 import {Button} from 'react-native-paper';
-import {useIsFocused} from '@react-navigation/core';
 import {CommonActions} from '@react-navigation/routers';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import url from '../global/url';
+import {FocusAwareStatusBar} from '../global/component';
 
 const resetAction = CommonActions.reset({
   index: 1,
@@ -77,18 +77,23 @@ const LoginScreen = ({navigation}) => {
     });
   };
 
-  function FocusAwareStatusBar() {
-    const isFocused = useIsFocused();
-
-    return isFocused ? (
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-    ) : null;
-  }
-
   return (
     <View style={styles.container}>
-      <FocusAwareStatusBar />
-      <Text style={styles.title}>Login</Text>
+      <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 50,
+        }}>
+        <Image
+          style={{width: 43, height: 34, marginEnd: 12}}
+          source={require('../images/hi-valeeqa.png')}
+        />
+        <Text style={{fontSize: 24, fontWeight: 'bold'}}>HI VALEEQA</Text>
+      </View>
+      {/*<Text style={styles.title}>Masuk!</Text>*/}
       <Input
         inputContainerStyle={styles.input}
         placeholder="Username/Email"
@@ -111,7 +116,7 @@ const LoginScreen = ({navigation}) => {
       />
       <Button
         mode="contained"
-        color="#FF8195"
+        color="#e87c80"
         labelStyle={{color: '#fff'}}
         style={{elevation: 0}}
         onPress={submitData}>
@@ -124,12 +129,12 @@ const LoginScreen = ({navigation}) => {
             alignItems: 'center',
           }}
           onPress={() => Linking.openURL(url + '/forgot-password')}>
-          <Text style={{color: '#FF8195'}}>Lupa Password?</Text>
+          <Text style={{color: '#e87c80'}}>Lupa Password?</Text>
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
           <Text>Belum Punya Akun? </Text>
           <TouchableOpacity onPress={() => Linking.openURL(url + '/register')}>
-            <Text style={{color: '#FF8195'}}>Daftar</Text>
+            <Text style={{color: '#e87c80'}}>Daftar</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -153,6 +158,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 90,
+    color: '#e87c80',
   },
   input: {
     borderColor: '#eee',
