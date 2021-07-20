@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,28 +6,28 @@ import {
   FlatList,
   Pressable,
   StatusBar,
-} from 'react-native';
-import {Badge, Card} from 'react-native-elements';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useIsFocused} from '@react-navigation/core';
-import url from '../global/url';
-import axios from 'axios';
-import {IconButton} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FocusAwareStatusBar} from '../global/component';
+} from "react-native";
+import { Badge, Card } from "react-native-elements";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useIsFocused } from "@react-navigation/core";
+import url from "../global/url";
+import axios from "axios";
+import { IconButton } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FocusAwareStatusBar } from "../global/component";
 
-function HomeScreen({navigation}) {
-  const [data, setData] = useState('');
-  const [cart, setCart] = useState('');
+function HomeScreen({ navigation }) {
+  const [data, setData] = useState("");
+  const [cart, setCart] = useState("");
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       const getProducts = async () => {
-        const id = await AsyncStorage.getItem('user_id');
+        const id = await AsyncStorage.getItem("user_id");
         const data = {
           user_id: id,
         };
         try {
-          axios.get(url + '/api/shop', {params: data}).then(res => {
+          axios.get(url + "/api/shop", { params: data }).then(res => {
             setData(res.data.products);
             setCart(res.data.cart);
           });
@@ -43,7 +43,7 @@ function HomeScreen({navigation}) {
 
   // Badge
   useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       navigation.setOptions({
         headerRight: () => (
           <View>
@@ -51,15 +51,15 @@ function HomeScreen({navigation}) {
               icon="shopping"
               size={26}
               color="#e87c80"
-              style={{paddingEnd: 0, backgroundColor: '#fff'}}
-              onPress={() => console.log('Pressed')}
+              style={{ paddingEnd: 0, backgroundColor: "#fff" }}
+              onPress={() => console.log("Pressed")}
             />
             {cart > 0 ? (
               <Badge
                 value={cart}
-                badgeStyle={{backgroundColor: '#000'}}
+                badgeStyle={{ backgroundColor: "#000" }}
                 containerStyle={{
-                  position: 'absolute',
+                  position: "absolute",
                   top: 9,
                   right: 1,
                 }}
@@ -79,35 +79,35 @@ function HomeScreen({navigation}) {
       <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
       <FlatList
         showsVerticalScrollIndicator={false}
-        columnWrapperStyle={{justifyContent: 'center'}}
+        columnWrapperStyle={{ justifyContent: "center" }}
         style={styles.container}
         data={data}
         numColumns={2}
-        ListFooterComponent={<View style={{height: 30}} />}
+        ListFooterComponent={<View style={{ height: 30 }} />}
         ListHeaderComponent={() => (
           <Text style={styles.title}>Produk Terbaru</Text>
         )}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <Card containerStyle={styles.card}>
             <Pressable
-              style={{padding: 24}}
-              android_ripple={{color: '#f2f2f2'}}
+              style={{ padding: 24 }}
+              android_ripple={{ color: "#f2f2f2" }}
               onPress={() =>
-                navigation.navigate('Detail', {
-                  screen: 'DetailScreen',
+                navigation.navigate("Detail", {
+                  screen: "DetailScreen",
                   params: {
                     product_id: item.product_id,
                   },
                 })
               }>
               <Card.Image
-                style={{width: 120, borderRadius: 10}}
-                source={{uri: url + '/img/produk/' + item.image}}
+                style={{ width: 120, borderRadius: 10 }}
+                source={{ uri: url + "/img/produk/" + item.image }}
               />
-              <Card.Title style={{marginTop: 8, marginBottom: 0}}>
+              <Card.Title style={{ marginTop: 8, marginBottom: 0 }}>
                 {item.product_name}
               </Card.Title>
-              <Card.Title style={{marginTop: 8, marginBottom: 0}}>
+              <Card.Title style={{ marginTop: 8, marginBottom: 0 }}>
                 Rp {item.price}
               </Card.Title>
             </Pressable>
@@ -126,11 +126,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   card: {
     elevation: 0,
-    margin: 0,
     borderWidth: 0,
     borderRadius: 16,
     padding: 0,

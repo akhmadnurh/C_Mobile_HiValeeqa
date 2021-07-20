@@ -180,26 +180,6 @@ const WishlistStackScreen = () => (
         headerRightContainerStyle: {
           marginEnd: 20,
         },
-        headerRight: () => (
-          <View>
-            <IconButton
-              icon="shopping"
-              size={26}
-              color="#fff"
-              style={{paddingEnd: 0, backgroundColor: '#e87c80'}}
-              onPress={() => console.log('Pressed')}
-            />
-            <Badge
-              value="99"
-              badgeStyle={{backgroundColor: '#000'}}
-              containerStyle={{
-                position: 'absolute',
-                top: 9,
-                right: 1,
-              }}
-            />
-          </View>
-        ),
       }}
     />
   </WishlistStack.Navigator>
