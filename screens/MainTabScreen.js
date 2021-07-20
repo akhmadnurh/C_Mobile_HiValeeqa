@@ -16,9 +16,11 @@ import ProfileScreen from './accounts/ProfileScreen';
 import AddressScreen from './accounts/AddressScreen';
 import ChangePasswordScreen from './accounts/ChangePasswordScreen';
 import SplashScreen from './SplashScreen';
+import CartScreen from './CartScreen';
 
 const HomeStack = createStackNavigator();
 const DetailStack = createStackNavigator();
+const CartStack = createStackNavigator();
 const AccountStack = createStackNavigator();
 const WishlistStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -30,6 +32,7 @@ const MainTabScreen = () => {
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Tabs" component={TabScreen} />
       <Stack.Screen name="Detail" component={DetailStackScreen} />
+      <Stack.Screen name="Cart" component={CartStackScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
     </Stack.Navigator>
   );
@@ -121,6 +124,22 @@ const DetailStackScreen = () => (
       }}
     />
   </DetailStack.Navigator>
+);
+
+const CartStackScreen = () => (
+  <CartStack.Navigator
+    screenOptions={{
+      headerStyle: {backgroundColor: '#fff', elevation: 2},
+      headerTintColor: '#000',
+    }}>
+    <CartStack.Screen
+      name="CartScreen"
+      component={CartScreen}
+      options={{
+        title: 'Cart',
+      }}
+    />
+  </CartStack.Navigator>
 );
 
 const AccountStackScreen = () => (

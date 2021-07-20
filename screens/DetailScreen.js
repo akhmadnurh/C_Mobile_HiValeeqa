@@ -1,12 +1,12 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, Alert, ToastAndroid} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import { Button, IconButton } from "react-native-paper";
+import {Button, IconButton} from 'react-native-paper';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import url from '../global/url';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Badge } from "react-native-elements";
+import {Badge} from 'react-native-elements';
 
 const DetailScreen = ({route, navigation}) => {
   const {product_id} = route.params;
@@ -52,15 +52,15 @@ const DetailScreen = ({route, navigation}) => {
             icon="shopping-outline"
             size={26}
             color="#e87c80"
-            style={{ paddingEnd: 0, backgroundColor: "#fff" }}
-            onPress={() => console.log("Pressed")}
+            style={{paddingEnd: 0, backgroundColor: '#fff'}}
+            onPress={() => navigation.navigate('Cart', {screen: 'CartScreen'})}
           />
           {cart > 0 ? (
             <Badge
               value={cart}
-              badgeStyle={{ backgroundColor: "#000" }}
+              badgeStyle={{backgroundColor: '#000'}}
               containerStyle={{
-                position: "absolute",
+                position: 'absolute',
                 top: 9,
                 right: 1,
               }}

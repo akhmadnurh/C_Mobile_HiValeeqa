@@ -1,33 +1,42 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity, Alert, ToastAndroid } from "react-native";
+import React, {useState, useEffect, useLayoutEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  Alert,
+  ToastAndroid,
+} from 'react-native';
 import {
   FocusAwareStatusBar,
   deviceHeight,
   deviceWidth,
-} from "../global/component";
-import { IconButton } from "react-native-paper";
-import { Badge } from "react-native-elements";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { ScrollView } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import url from "../global/url";
+} from '../global/component';
+import {IconButton} from 'react-native-paper';
+import {Badge} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ScrollView} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import url from '../global/url';
 
-function WishlistScreen({ navigation }) {
-  const [userId, setUserId] = useState("");
-  const [cart, setCart] = useState("");
+function WishlistScreen({navigation}) {
+  const [userId, setUserId] = useState('');
+  const [cart, setCart] = useState('');
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       const getData = async () => {
-        const id = await AsyncStorage.getItem("user_id");
+        const id = await AsyncStorage.getItem('user_id');
         setUserId(id);
         const data = {
           user_id: id,
         };
         try {
-          axios.get(url + "/api/wishlist", { params: data }).then(res => {
+          axios.get(url + '/api/wishlist', {params: data}).then(res => {
             setCart(res.data.data.cart);
             setProducts(res.data.data.products);
             // console.log(res.data.data.products);
@@ -50,15 +59,15 @@ function WishlistScreen({ navigation }) {
             icon="shopping"
             size={26}
             color="#fff"
-            style={{ paddingEnd: 0, backgroundColor: "#e87c80" }}
-            onPress={() => console.log("Pressed")}
+            style={{paddingEnd: 0, backgroundColor: '#e87c80'}}
+            onPress={() => navigation.navigate('Cart', {screen: 'CartScreen'})}
           />
           {cart > 0 ? (
             <Badge
               value={cart}
-              badgeStyle={{ backgroundColor: "#000" }}
+              badgeStyle={{backgroundColor: '#000'}}
               containerStyle={{
-                position: "absolute",
+                position: 'absolute',
                 top: 9,
                 right: 1,
               }}
@@ -71,16 +80,20 @@ function WishlistScreen({ navigation }) {
     });
   });
 
-  const updateProduct = (productId) => {
-    const temp = products.filter((product) => {
+  const updateProduct = productId => {
+    const temp = products.filter(product => {
       return product.product_id != productId;
     });
 
     setProducts(temp);
-    ToastAndroid.showWithGravity("Berhasil menghapus item dari Wishlist", ToastAndroid.SHORT, ToastAndroid.TOP);
+    ToastAndroid.showWithGravity(
+      'Berhasil menghapus item dari Wishlist',
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP,
+    );
   };
   return (
-    <View style={{ backgroundColor: "#fff" }}>
+    <View style={{backgroundColor: '#fff'}}>
       <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
       <ScrollView showsVerticalScrollIndicator={false}>
         {products.length < 1 ? (
@@ -88,16 +101,24 @@ function WishlistScreen({ navigation }) {
         ) : (
           products.map((data, key) => {
             return (
-              <WishlistItem key={key} index={key} image={data.image} name={data.product_name} stock={data.stock}
-                            price={data.price}
-                            productId={data.product_id} onPress={() => {
-                navigation.navigate("Detail", {
-                  screen: "DetailScreen",
-                  params: {
-                    product_id: data.product_id,
-                  },
-                });
-              }} product={updateProduct} />
+              <WishlistItem
+                key={key}
+                index={key}
+                image={data.image}
+                name={data.product_name}
+                stock={data.stock}
+                price={data.price}
+                productId={data.product_id}
+                onPress={() => {
+                  navigation.navigate('Detail', {
+                    screen: 'DetailScreen',
+                    params: {
+                      product_id: data.product_id,
+                    },
+                  });
+                }}
+                product={updateProduct}
+              />
             );
           })
         )}
@@ -117,17 +138,17 @@ function WishlistEmpty() {
 function WishlistItem(props) {
   const removeWishlist = async () => {
     try {
-      const user_id = await AsyncStorage.getItem("user_id");
+      const user_id = await AsyncStorage.getItem('user_id');
       const data = {
         user_id: user_id,
       };
       axios
-        .get(url + "/api/r-wishlist/" + props.productId, {
+        .get(url + '/api/r-wishlist/' + props.productId, {
           params: data,
         })
         .then(res => {
           // setWishlist(res.data.status);
-          console.log("ok");
+          console.log('ok');
         });
     } catch (e) {
       console.warn(e.message);
@@ -140,20 +161,22 @@ function WishlistItem(props) {
       <TouchableOpacity onPress={props.onPress}>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
           }}>
           <Image
-            source={{ uri: url + "/img/produk/" + props.image }}
+            source={{uri: url + '/img/produk/' + props.image}}
             style={styles.listImage}
             resizeMode="cover"
           />
           <View style={styles.listContainerText}>
             <View>
-              <Text style={{ fontSize: 18 }}>{props.name}</Text>
+              <Text style={{fontSize: 18}}>{props.name}</Text>
               <Text>Stok: {props.stock}</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>Rp {props.price}</Text>
+              <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                Rp {props.price}
+              </Text>
             </View>
           </View>
         </View>
@@ -171,21 +194,21 @@ function WishlistItem(props) {
             padding: 9,
           }}>
           <Pressable
-            onPress={() => console.log("Pressed")}
+            onPress={() => console.log('Pressed')}
             android_ripple={{
-              color: "rgba(232,124,128, 0.32)",
+              color: 'rgba(232,124,128, 0.32)',
               radius: 30,
               borderless: true,
             }}>
             <Icon name="shopping-outline" size={26} color="#e87c80" />
             <Badge
               value="+"
-              textStyle={{ color: "#e87c80", fontWeight: "bold" }}
+              textStyle={{color: '#e87c80', fontWeight: 'bold'}}
               badgeStyle={{
-                backgroundColor: "#fff",
+                backgroundColor: '#fff',
               }}
               containerStyle={{
-                position: "absolute",
+                position: 'absolute',
                 bottom: -6,
                 left: -1,
               }}
@@ -201,27 +224,27 @@ const styles = StyleSheet.create({
   empty: {
     height: deviceHeight,
     width: deviceWidth,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   list: {
     padding: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#fff",
-    borderBottomColor: "#eee",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderBottomColor: '#eee',
     borderBottomWidth: 2,
   },
-  listImage: { width: 100, height: 150 },
+  listImage: {width: 100, height: 150},
   listContainerText: {
-    flexDirection: "column",
-    justifyContent: "space-between",
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     marginStart: 10,
   },
   listContainerButton: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 
