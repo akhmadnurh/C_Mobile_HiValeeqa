@@ -5,17 +5,16 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  StatusBar,
+  ImageBackground,
 } from 'react-native';
 import {Badge, Card} from 'react-native-elements';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useIsFocused} from '@react-navigation/core';
 import url from '../global/url';
 import axios from 'axios';
 import {IconButton} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FocusAwareStatusBar, Prices} from '../global/component';
-import NumberFormat from 'react-number-format';
+import {ScrollView} from 'react-native-gesture-handler';
 
 function HomeScreen({navigation}) {
   const [data, setData] = useState('');
@@ -77,7 +76,7 @@ function HomeScreen({navigation}) {
       <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
       <FlatList
         showsVerticalScrollIndicator={false}
-        columnWrapperStyle={{justifyContent: 'center'}}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
         style={styles.container}
         data={data}
         numColumns={2}
@@ -88,7 +87,7 @@ function HomeScreen({navigation}) {
         renderItem={({item}) => (
           <Card containerStyle={styles.card}>
             <Pressable
-              style={{padding: 24}}
+              style={{padding: 0}}
               android_ripple={{color: '#f2f2f2'}}
               onPress={() =>
                 navigation.navigate('Detail', {
@@ -99,7 +98,8 @@ function HomeScreen({navigation}) {
                 })
               }>
               <Card.Image
-                style={{width: 120, borderRadius: 10}}
+                resizeMode="cover"
+                style={styles.cardImage}
                 source={{uri: url + '/img/produk/' + item.image}}
               />
               <Card.Title style={{marginTop: 8, marginBottom: 0}}>
@@ -108,9 +108,7 @@ function HomeScreen({navigation}) {
               <Prices
                 value={item.price}
                 renderText={value => (
-                  <Card.Title style={{marginTop: 8, marginBottom: 0}}>
-                    {value}
-                  </Card.Title>
+                  <Card.Title style={{marginVertical: 8}}>{value}</Card.Title>
                 )}
               />
             </Pressable>
@@ -132,11 +130,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   card: {
+    width: '50%',
     elevation: 0,
     borderWidth: 0,
     borderRadius: 16,
     padding: 0,
-    margin: 8,
+    marginHorizontal: 4,
+    marginVertical: 8,
+  },
+  cardImage: {
+    width: 174,
+    height: 240,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
 });
 

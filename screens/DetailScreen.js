@@ -8,7 +8,6 @@ import url from '../global/url';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Badge} from 'react-native-elements';
 import {FocusAwareStatusBar, Prices} from '../global/component';
-import NumberFormat from 'react-number-format';
 
 const DetailScreen = ({route, navigation}) => {
   const {product_id} = route.params;

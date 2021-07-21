@@ -2,6 +2,7 @@ import React from 'react';
 import {TouchableOpacity, Text, View, Pressable} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {IconButton} from 'react-native-paper';
 import {Badge} from 'react-native-elements';
@@ -18,14 +19,23 @@ import ChangePasswordScreen from './accounts/ChangePasswordScreen';
 import SplashScreen from './SplashScreen';
 import CartScreen from './CartScreen';
 import CheckoutScreen from './CheckoutScreen';
+import PaymentPendingScreen from './transaction/PaymentPendingScreen';
+import ShipmentPendingScreen from './transaction/ShipmentPendingScreen';
+import ShipmentProcessScreen from './transaction/ShipmentProcessScreen';
+import OrderCompletedScreen from './transaction/OrderCompletedScreen';
+import OrderCanceledScreen from './transaction/OrderCanceledScreen';
+import OrderDetailScreen from './transaction/OrderDetailScreen';
 
 const HomeStack = createStackNavigator();
 const DetailStack = createStackNavigator();
 const CartStack = createStackNavigator();
 const AccountStack = createStackNavigator();
 const WishlistStack = createStackNavigator();
+const TransactionStack = createStackNavigator();
+const OrderDetailStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
+const Top = createMaterialTopTabNavigator();
 
 const MainTabScreen = () => {
   return (
@@ -35,6 +45,7 @@ const MainTabScreen = () => {
       <Stack.Screen name="Detail" component={DetailStackScreen} />
       <Stack.Screen name="Cart" component={CartStackScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="OrderDetail" component={OrderDetailStackScreen} />
     </Stack.Navigator>
   );
 };
@@ -56,8 +67,8 @@ const TabScreen = () => (
       }}
     />
     <Tab.Screen
-      name="Order"
-      component={OrderScreen}
+      name="Transaction"
+      component={TransactionStackScreen}
       options={{
         tabBarLabel: 'Pesanan',
         tabBarIcon: ({color}) => (
@@ -125,6 +136,58 @@ const DetailStackScreen = () => (
       }}
     />
   </DetailStack.Navigator>
+);
+
+const TransactionStackScreen = () => (
+  <TransactionStack.Navigator
+    screenOptions={{
+      headerStyle: {backgroundColor: '#fff', elevation: 0},
+      headerTintColor: '#000',
+    }}>
+    <TransactionStack.Screen
+      name="TransactionScreen"
+      component={TransactionTab}
+      options={{
+        title: 'Pesanan',
+      }}
+    />
+  </TransactionStack.Navigator>
+);
+
+const TransactionTab = () => (
+  <Top.Navigator
+    tabBarOptions={{
+      activeTintColor: '#e87c80',
+      inactiveTintColor: 'rgba(0,0,0,0.75)',
+      scrollEnabled: true,
+      indicatorStyle: {backgroundColor: '#e87c80'},
+    }}>
+    <Top.Screen
+      name="PaymentPending"
+      component={PaymentPendingScreen}
+      options={{title: 'Belum Bayar'}}
+    />
+    <Top.Screen
+      name="ShipmentPending"
+      component={ShipmentPendingScreen}
+      options={{title: 'Dikemas'}}
+    />
+    <Top.Screen
+      name="ShipmentProcess"
+      component={ShipmentProcessScreen}
+      options={{title: 'Dikirim'}}
+    />
+    <Top.Screen
+      name="OrderCompleted"
+      component={OrderCompletedScreen}
+      options={{title: 'Selesai'}}
+    />
+    <Top.Screen
+      name="OrderCanceled"
+      component={OrderCanceledScreen}
+      options={{title: 'Batal'}}
+    />
+  </Top.Navigator>
 );
 
 const CartStackScreen = () => (
@@ -213,4 +276,20 @@ const WishlistStackScreen = () => (
       }}
     />
   </WishlistStack.Navigator>
+);
+
+const OrderDetailStackScreen = () => (
+  <OrderDetailStack.Navigator
+    screenOptions={{
+      headerStyle: {backgroundColor: '#fff', elevation: 0},
+      headerTintColor: '#000',
+    }}>
+    <OrderDetailStack.Screen
+      name="OrderDetailScreen"
+      component={OrderDetailScreen}
+      options={{
+        title: 'Rincian Pesanan',
+      }}
+    />
+  </OrderDetailStack.Navigator>
 );
