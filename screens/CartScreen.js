@@ -64,11 +64,15 @@ function CartScreen({ navigation }) {
       return product.product_id != productId;
     });
 
-    setProducts(temp);
+    const total = products.filter(product => {
+      return product.product_id == productId;
+    });
 
     // update checkout status
-    updateCheckoutStatus(temp);
+    updateCheckoutStatus(temp, total);
 
+    // Set products
+    setProducts(temp);
     ToastAndroid.showWithGravity(
       "Berhasil menghapus item dari Keranjang Belanja.",
       ToastAndroid.SHORT,
@@ -76,12 +80,26 @@ function CartScreen({ navigation }) {
     );
   };
 
-  const updateCheckoutStatus = (products) => {
+  const updateCheckoutStatus = (products, cost) => {
     let temp = products.filter((data) => {
       return data.stock < 1;
     });
+    
+    // Set status
     const status = temp.length > 0 ? 0 : 1;
-    setCheckoutStatus(status);
+    if(products.length < 1){
+      setCheckoutStatus(0);
+    }else{
+      setCheckoutStatus(status);
+    }
+
+    // Update total cost
+    let t = 0;
+    cost.map(data => {
+      t += (data.quantity * data.price);
+    });
+    let totalCost = total - t;
+    setTotal(totalCost);
   };
 
   const updateTotal = (result, method) => {
