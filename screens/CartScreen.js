@@ -84,12 +84,12 @@ function CartScreen({ navigation }) {
     let temp = products.filter((data) => {
       return data.stock < 1;
     });
-    
+
     // Set status
     const status = temp.length > 0 ? 0 : 1;
-    if(products.length < 1){
+    if (products.length < 1) {
       setCheckoutStatus(0);
-    }else{
+    } else {
       setCheckoutStatus(status);
     }
 
@@ -127,6 +127,7 @@ function CartScreen({ navigation }) {
             axios.get(url + "/api/remove-all-cart", { params: data }).then(res => {
               if (res.data.msg == "success") {
                 setProducts("");
+                setTotal(0);
                 Alert.alert("Success", "Semua item di keranjang belanja berhasil dihapus.");
               } else {
                 Alert.alert("Error", "Gagal menghapus semua data.");

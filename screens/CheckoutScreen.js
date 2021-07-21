@@ -1,11 +1,40 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {Button, TextInput} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {FocusAwareStatusBar} from '../global/component';
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { Button, TextInput } from "react-native-paper";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { FocusAwareStatusBar } from "../global/component";
+import url from "../global/url";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
-function CheckoutScreen() {
+function CheckoutScreen({ navigation }) {
+  const [userId, setUserId] = useState("");
+  const [products, setProducts] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      const getData = async () => {
+        try {
+          const id = AsyncStorage.getItem("user_id");
+          setUserId(id);
+          const data = {
+            user_id: id,
+          };
+
+          axios.get(url + "/api/billing", { params: data }).then(res => {
+            setProducts(res.data.products);
+          });
+        } catch (e) {
+          console.warn(e);
+        }
+      };
+      getData();
+    });
+    return unsubscribe;
+  }, []);
+
+
   return (
     <ScrollView>
       <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -16,15 +45,15 @@ function CheckoutScreen() {
       <Button
         mode="contained"
         color="#e87c80"
-        style={{elevation: 0, marginHorizontal: 16, marginTop: 12}}
-        labelStyle={{color: '#fff'}}>
+        style={{ elevation: 0, marginHorizontal: 16, marginTop: 12 }}
+        labelStyle={{ color: "#fff" }}>
         Konfirmasi
       </Button>
       <Button
         mode="outlined"
         icon="whatsapp"
         color="#e87c80"
-        style={{marginHorizontal: 16, marginTop: 12, marginBottom: 24}}>
+        style={{ marginHorizontal: 16, marginTop: 12, marginBottom: 24 }}>
         Hubungi Admin
       </Button>
     </ScrollView>
@@ -54,42 +83,42 @@ function ItemTransaction() {
       </View>
       <View style={styles.listItem}>
         <Image
-          source={require('../images/dummy.png')}
-          style={{width: 50, height: 75}}
+          source={require("../images/dummy.png")}
+          style={{ width: 50, height: 75 }}
           resizeMode="cover"
         />
         <View style={styles.listItemText}>
-          <Text style={{fontSize: 16}}>Yumna Dress</Text>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Rp 160000</Text>
+          <Text style={{ fontSize: 16 }}>Yumna Dress</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Rp 160000</Text>
           <Text>x2</Text>
         </View>
       </View>
       <View style={styles.listItem}>
         <Image
-          source={require('../images/dummy.png')}
-          style={{width: 50, height: 75}}
+          source={require("../images/dummy.png")}
+          style={{ width: 50, height: 75 }}
           resizeMode="cover"
         />
         <View style={styles.listItemText}>
-          <Text style={{fontSize: 16}}>Yumna Dress</Text>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Rp 160000</Text>
+          <Text style={{ fontSize: 16 }}>Yumna Dress</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Rp 160000</Text>
           <Text>x2</Text>
         </View>
       </View>
       <View style={styles.listItem}>
         <Image
-          source={require('../images/dummy.png')}
-          style={{width: 50, height: 75}}
+          source={require("../images/dummy.png")}
+          style={{ width: 50, height: 75 }}
           resizeMode="cover"
         />
         <View style={styles.listItemText}>
-          <Text style={{fontSize: 16}}>Yumna Dress</Text>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Rp 160000</Text>
+          <Text style={{ fontSize: 16 }}>Yumna Dress</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Rp 160000</Text>
           <Text>x2</Text>
         </View>
       </View>
 
-      <View style={{paddingHorizontal: 16, marginTop: 8}}>
+      <View style={{ paddingHorizontal: 16, marginTop: 8 }}>
         <View style={styles.textSubTot}>
           <Text>Subtotal</Text>
           <Text>Rp 320000</Text>
@@ -98,9 +127,9 @@ function ItemTransaction() {
           <Text>Ongkos Kirim</Text>
           <Text>Rp 20000</Text>
         </View>
-        <View style={[styles.textSubTot, {marginBottom: 0}]}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Total Bayar</Text>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Rp 340000</Text>
+        <View style={[styles.textSubTot, { marginBottom: 0 }]}>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Total Bayar</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Rp 340000</Text>
         </View>
       </View>
     </View>
@@ -113,7 +142,7 @@ function InputBank() {
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Konfirmasi Pembayaran</Text>
       </View>
-      <View style={{marginTop: 8, marginStart: 8}}>
+      <View style={{ marginTop: 8, marginStart: 8 }}>
         <TextInput mode="outlined" label="Bank Anda" />
         <TextInput mode="outlined" label="Nama (Sesuai Rekening)" />
         <TextInput mode="outlined" label="Rekening" />
@@ -128,11 +157,11 @@ function Rekening() {
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Bank Transfer</Text>
       </View>
-      <View style={{marginStart: 9, marginTop: 8}}>
-        <Text style={{fontWeight: 'bold', fontSize: 16, color: '#6c757d'}}>
+      <View style={{ marginStart: 9, marginTop: 8 }}>
+        <Text style={{ fontWeight: "bold", fontSize: 16, color: "#6c757d" }}>
           BNI (Akhmad Nur Hidayatulloh)
         </Text>
-        <Text style={{fontWeight: 'bold', fontSize: 16}}>89787654324</Text>
+        <Text style={{ fontWeight: "bold", fontSize: 16 }}>89787654324</Text>
       </View>
     </View>
   );
@@ -140,20 +169,20 @@ function Rekening() {
 
 const styles = StyleSheet.create({
   shipContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 16,
     margin: 8,
     borderRadius: 20,
   },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginStart: 8,
-    color: '#000',
+    color: "#000",
   },
   shipContent: {
     marginStart: 30,
@@ -162,30 +191,30 @@ const styles = StyleSheet.create({
   transactionContainer: {
     margin: 8,
     paddingVertical: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 20,
   },
   transactionHeader: {
     paddingHorizontal: 16,
-    borderBottomColor: '#eee',
+    borderBottomColor: "#eee",
     borderBottomWidth: 1,
     paddingBottom: 8,
   },
   listItem: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    flexDirection: 'row',
-    borderBottomColor: '#eee',
+    flexDirection: "row",
+    borderBottomColor: "#eee",
     borderBottomWidth: 1,
   },
   listItemText: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    flexDirection: "column",
+    justifyContent: "space-between",
     marginStart: 12,
   },
   textSubTot: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 8,
   },
 });
