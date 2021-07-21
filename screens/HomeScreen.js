@@ -43,7 +43,6 @@ function HomeScreen({navigation}) {
 
   // Badge
   useLayoutEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
       navigation.setOptions({
         headerRight: () => (
           <View>
@@ -56,7 +55,9 @@ function HomeScreen({navigation}) {
                 navigation.navigate('Cart', {screen: 'CartScreen'})
               }
             />
-            {cart > 0 ? (
+            {cart < 1 ? (
+              <View></View>
+            ) : (
               <Badge
                 value={cart}
                 badgeStyle={{backgroundColor: '#000'}}
@@ -66,14 +67,10 @@ function HomeScreen({navigation}) {
                   right: 1,
                 }}
               />
-            ) : (
-              <View></View>
             )}
           </View>
         ),
       });
-    });
-    return unsubscribe;
   });
 
   return (

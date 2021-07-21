@@ -39,7 +39,6 @@ function WishlistScreen({navigation}) {
           axios.get(url + '/api/wishlist', {params: data}).then(res => {
             setCart(res.data.data.cart);
             setProducts(res.data.data.products);
-            // console.log(res.data.data.products);
           });
         } catch (e) {
           console.warn(e);
@@ -87,11 +86,22 @@ function WishlistScreen({navigation}) {
 
     setProducts(temp);
     ToastAndroid.showWithGravity(
-      'Berhasil menghapus item dari Wishlist',
+      'Berhasil menghapus item dari Wishlist.',
       ToastAndroid.SHORT,
       ToastAndroid.TOP,
     );
   };
+
+  const updateCart = () => {
+    try {
+      axios.get(url + '/api/wishlist', {params: {user_id: userId}}).then(res => {
+        setCart(res.data.data.cart);
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
   return (
     <View style={{backgroundColor: '#fff'}}>
       <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
@@ -118,6 +128,7 @@ function WishlistScreen({navigation}) {
                   });
                 }}
                 product={updateProduct}
+                cart={updateCart}
               />
             );
           })
@@ -136,6 +147,27 @@ function WishlistEmpty() {
 }
 
 function WishlistItem(props) {
+  const addToCart = async () => {
+    try {
+      const user_id = await AsyncStorage.getItem('user_id');
+      const data = {
+        user_id: user_id,
+      };
+      axios.get(url + "/api/add-to-cart/" + props.productId, { params: data }).then(res => {
+        if (res.data.msg == "success") {
+
+          ToastAndroid.showWithGravity("Produk berhasil ditambahkan ke Keranjang Belanja", ToastAndroid.SHORT, ToastAndroid.TOP);
+        } else {
+          ToastAndroid.showWithGravity("Produk gagal ditambahkan ke Keranjang Belanja", ToastAndroid.SHORT, ToastAndroid.TOP);
+        }
+        props.cart()
+      });
+
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
   const removeWishlist = async () => {
     try {
       const user_id = await AsyncStorage.getItem('user_id');
@@ -147,13 +179,11 @@ function WishlistItem(props) {
           params: data,
         })
         .then(res => {
-          // setWishlist(res.data.status);
-          console.log('ok');
+          props.product(props.productId);
         });
     } catch (e) {
       console.warn(e.message);
     }
-    props.product(props.productId);
   };
 
   return (
@@ -194,7 +224,7 @@ function WishlistItem(props) {
             padding: 9,
           }}>
           <Pressable
-            onPress={() => console.log('Pressed')}
+            onPress={addToCart}
             android_ripple={{
               color: 'rgba(232,124,128, 0.32)',
               radius: 30,
