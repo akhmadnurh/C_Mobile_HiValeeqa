@@ -45,9 +45,9 @@ function CartScreen({ navigation }) {
             // Set total
             let total = 0;
             res.data.products.products.map((data, key) => {
-              total += (data.quantity * data.price)
-            })
-            setTotal(total)
+              total += (data.quantity * data.price);
+            });
+            setTotal(total);
           });
         } catch (e) {
           console.log(e);
@@ -59,17 +59,38 @@ function CartScreen({ navigation }) {
     return unsubsribe;
   });
 
-  const updateProduct = productId => {
+  const updateProduct = (productId) => {
     const temp = products.filter(product => {
       return product.product_id != productId;
     });
 
     setProducts(temp);
+
+    // update checkout status
+    updateCheckoutStatus(temp);
+
     ToastAndroid.showWithGravity(
       "Berhasil menghapus item dari Keranjang Belanja.",
       ToastAndroid.SHORT,
       ToastAndroid.TOP,
     );
+  };
+
+  const updateCheckoutStatus = (products) => {
+    let temp = products.filter((data) => {
+      return data.stock < 1;
+    });
+    const status = temp.length > 0 ? 0 : 1;
+    setCheckoutStatus(status);
+  };
+
+  const updateTotal = (result, method) => {
+    let totalTemp = total;
+    if (method == "plus") {
+      setTotal(totalTemp + result);
+    } else {
+      setTotal(totalTemp - result);
+    }
   };
 
   const removeAllCart = () => {
@@ -114,7 +135,7 @@ function CartScreen({ navigation }) {
                         onPress={() => navigation.navigate("Detail", {
                           screen: "DetailScreen",
                           params: { product_id: data.product_id },
-                        })} updateProduct={updateProduct} />
+                        })} updateProduct={updateProduct} updateTotal={updateTotal} />
             );
           })
         )}
@@ -147,7 +168,7 @@ function CartScreen({ navigation }) {
               mode="contained"
               color="#e87c80"
               labelStyle={{ color: "#fff" }}
-              onPress={() => console.log("click")}
+              onPress={() => navigation.navigate("Checkout")}
               style={styles.btnCheckout}>
               Checkout
             </Button>
@@ -185,6 +206,7 @@ function CartItem(props) {
       await axios.get(url + "/api/plus-item-cart/" + props.data.product_id, { params: data }).then(res => {
         if (res.data.msg == "success") {
           setQuantity(quantity + 1);
+          props.updateTotal(props.data.price, "plus");
         } else {
           ToastAndroid.showWithGravity("Stok tidak cukup.", ToastAndroid.SHORT, ToastAndroid.TOP);
         }
@@ -202,6 +224,7 @@ function CartItem(props) {
       await axios.get(url + "/api/minus-item-cart/" + props.data.product_id, { params: data }).then(res => {
         if (res.data.msg == "success") {
           setQuantity(quantity - 1);
+          props.updateTotal(props.data.price, "minus");
         } else {
           ToastAndroid.showWithGravity("Tidak boleh kurang dari 1.", ToastAndroid.SHORT, ToastAndroid.TOP);
         }
