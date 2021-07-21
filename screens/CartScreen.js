@@ -25,6 +25,7 @@ function CartScreen({ navigation }) {
   const [products, setProducts] = useState([]);
   const [available, setAvailable] = useState("");
   const [checkoutStatus, setCheckoutStatus] = useState("");
+  const [total, setTotal] = useState("");
 
   useEffect(() => {
     const unsubsribe = navigation.addListener("focus", () => {
@@ -40,6 +41,13 @@ function CartScreen({ navigation }) {
             setProducts(res.data.products.products);
             setAvailable(res.data.products.available);
             setCheckoutStatus(res.data.products.checkout_status);
+
+            // Set total
+            let total = 0;
+            res.data.products.products.map((data, key) => {
+              total += (data.quantity * data.price)
+            })
+            setTotal(total)
           });
         } catch (e) {
           console.log(e);
@@ -112,7 +120,7 @@ function CartScreen({ navigation }) {
         )}
       </ScrollView>
       <View style={styles.containerBtn}>
-        <Text style={styles.textTotal}>Total: Rp 230000</Text>
+        <Text style={styles.textTotal}>Total: Rp {total}</Text>
         <View style={{ flexDirection: "row" }}>
           {products.length < 1 ? (
             <Button
