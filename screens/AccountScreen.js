@@ -8,6 +8,7 @@ import {
   Pressable,
   Alert,
   Linking,
+  Image,
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/core';
 import {CommonActions} from '@react-navigation/routers';
@@ -67,7 +68,15 @@ function AccountScreen({navigation}) {
     <View style={{backgroundColor: '#e87c80'}}>
       <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
       <View style={styles.container}>
-        <Avatar.Icon size={50} icon="folder" />
+        <Image
+          resizeMode="cover"
+          source={require('../images/default.png')}
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: 50 / 2,
+          }}
+        />
         <View style={styles.personName}>
           <Text style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>
             {userdata.name}

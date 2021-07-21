@@ -7,9 +7,9 @@ import {
   Button,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
-import {useIsFocused} from '@react-navigation/core';
-import {Avatar, RadioButton} from 'react-native-paper';
+import {RadioButton} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Input} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -88,7 +88,15 @@ function ProfileScreen({navigation}) {
       style={{backgroundColor: '#e87c80'}}>
       <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
       <View style={styles.containerAvatar}>
-        <Avatar.Icon icon="folder" size={80} />
+        <Image
+          resizeMode="cover"
+          source={require('../../images/default.png')}
+          style={{
+            width: 70,
+            height: 70,
+            borderRadius: 70 / 2,
+          }}
+        />
       </View>
       <View style={styles.curves} />
       <View style={styles.container}>

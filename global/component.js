@@ -12,9 +12,12 @@ export function FocusAwareStatusBar(props) {
 export function Prices(props) {
   return (
     <NumberFormat
+      decimalSeparator=","
       displayType={'text'}
-      thousandSeparator={true}
+      thousandSeparator="."
+      fixedDecimalScale={2}
       prefix={'Rp '}
+      suffix={',00'}
       {...props}
     />
   );
