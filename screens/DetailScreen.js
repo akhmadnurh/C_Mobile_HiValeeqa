@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import url from "../global/url";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Badge } from "react-native-elements";
+import { FocusAwareStatusBar } from "../global/component";
 
 const DetailScreen = ({ route, navigation }) => {
   const { product_id } = route.params;
@@ -127,7 +128,7 @@ const DetailScreen = ({ route, navigation }) => {
       };
       axios.get(url + "/api/add-to-cart/" + product_id, { params: data }).then(res => {
         if (res.data.msg == "success") {
-          axios.get(url + '/api/wishlist', {params: data}).then(res => {
+          axios.get(url + "/api/wishlist", { params: data }).then(res => {
             setCart(res.data.data.cart);
           });
           ToastAndroid.showWithGravity("Produk berhasil ditambahkan ke Keranjang Belanja", ToastAndroid.SHORT, ToastAndroid.TOP);
@@ -143,6 +144,7 @@ const DetailScreen = ({ route, navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
+      <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.img}>
           <Image
@@ -156,7 +158,8 @@ const DetailScreen = ({ route, navigation }) => {
             Rp {product.price}
           </Text>
           <Text style={{ fontSize: 16, fontWeight: "600", marginTop: 4 }}>
-            {product.product_name}
+            {product.product_name} {product.stock < 1 ? (
+            <Text>|<Text style={{ color: "#dc3545" }}> Stok produk kosong</Text></Text>) : (<View></View>)}
           </Text>
         </View>
         <View style={styles.description}>
@@ -181,14 +184,26 @@ const DetailScreen = ({ route, navigation }) => {
         </View>
       </ScrollView>
       <View style={styles.containerBtn}>
-        <Button
-          mode="contained"
-          color="#e87c80"
-          labelStyle={{ color: "#fff" }}
-          style={{ borderRadius: 8, flex: 0.8, elevation: 0 }}
-          onPress={addToCart}>
-          Add to Cart
-        </Button>
+        {product.stock < 1 ? (
+          <Button
+            disabled
+            mode="contained"
+            color="#e87c80"
+            labelStyle={{ color: "#fff" }}
+            style={{ borderRadius: 8, flex: 0.8, elevation: 0 }}
+            onPress={addToCart}>
+            Add to Cart
+          </Button>
+        ) : (
+          <Button
+            mode="contained"
+            color="#e87c80"
+            labelStyle={{ color: "#fff" }}
+            style={{ borderRadius: 8, flex: 0.8, elevation: 0 }}
+            onPress={addToCart}>
+            Add to Cart
+          </Button>
+        )}
         {wishlist == 0 ? (
           <Button
             mode="outlined"

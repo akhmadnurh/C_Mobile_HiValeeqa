@@ -17,6 +17,7 @@ import AddressScreen from './accounts/AddressScreen';
 import ChangePasswordScreen from './accounts/ChangePasswordScreen';
 import SplashScreen from './SplashScreen';
 import CartScreen from './CartScreen';
+import CheckoutScreen from './CheckoutScreen';
 
 const HomeStack = createStackNavigator();
 const DetailStack = createStackNavigator();
@@ -137,6 +138,13 @@ const CartStackScreen = () => (
       component={CartScreen}
       options={{
         title: 'Cart',
+      }}
+    />
+    <CartStack.Screen
+      name="Checkout"
+      component={CheckoutScreen}
+      options={{
+        title: 'Checkout',
       }}
     />
   </CartStack.Navigator>

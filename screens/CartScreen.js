@@ -64,6 +64,35 @@ function CartScreen({ navigation }) {
     );
   };
 
+  const removeAllCart = () => {
+    Alert.alert("Hapus Semua", "Apakah anda yakin ingin menghapus semua keranjang belanja?", [
+      {
+        text: "Batal",
+        style: "cancel",
+      },
+      {
+        text: "Hapus",
+        onPress: () => {
+          try {
+            const data = {
+              user_id: userId,
+            };
+            axios.get(url + "/api/remove-all-cart", { params: data }).then(res => {
+              if (res.data.msg == "success") {
+                setProducts("");
+                Alert.alert("Success", "Semua item di keranjang belanja berhasil dihapus.");
+              } else {
+                Alert.alert("Error", "Gagal menghapus semua data.");
+              }
+            });
+          } catch (e) {
+            console.warn(e);
+          }
+        },
+      },
+    ]);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -85,14 +114,26 @@ function CartScreen({ navigation }) {
       <View style={styles.containerBtn}>
         <Text style={styles.textTotal}>Total: Rp 230000</Text>
         <View style={{ flexDirection: "row" }}>
-          <Button
-            mode="outlined"
-            color="#e87c80"
-            labelStyle={{ color: "#e87c80" }}
-            onPress={() => console.log("click")}
-            style={styles.btnDeleteAll}>
-            Hapus Semua
-          </Button>
+          {products.length < 1 ? (
+            <Button
+              disabled={true}
+              mode="outlined"
+              color="#e87c80"
+              labelStyle={{ color: "#e87c80" }}
+              onPress={removeAllCart}
+              style={styles.btnDeleteAll}>
+              Hapus Semua
+            </Button>
+          ) : (
+            <Button
+              mode="outlined"
+              color="#e87c80"
+              labelStyle={{ color: "#e87c80" }}
+              onPress={removeAllCart}
+              style={styles.btnDeleteAll}>
+              Hapus Semua
+            </Button>
+          )}
           {checkoutStatus === 1 ? (
             <Button
               mode="contained"
@@ -177,9 +218,8 @@ function CartItem(props) {
     } catch (e) {
       console.warn(e.message);
     }
-    props.updateProduct(props.data.product_id)
+    props.updateProduct(props.data.product_id);
   };
-
 
   return (
     <View style={styles.list}>
@@ -192,33 +232,63 @@ function CartItem(props) {
         <View style={styles.listContainerText}>
           <TouchableOpacity onPress={props.onPress}>
             <View>
-              <Text style={{ fontSize: 18 }}>{props.data.product_name}</Text>
+              <Text style={{ fontSize: 18 }}>{props.data.product_name}
+                {props.data.stock < 1 ? (
+                  <Text style={{ fontSize: 16 }}> |<Text style={{ color: "#dc3545" }}> Kosong</Text></Text>
+                ) : (<View></View>)}
+              </Text>
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>Rp {props.data.price}</Text>
             </View>
           </TouchableOpacity>
           <View style={{ flexDirection: "row" }}>
             <View style={[styles.btnWrap, { borderRightWidth: 0 }]}>
-              <Pressable
-                android_ripple={{
-                  color: "rgba(232,124,128, 0.26)",
-                  borderless: true,
-                  radius: 30,
-                }}
-                onPress={minusItem}>
-                <Icon name="minus" size={15} color="#e87c80" />
-              </Pressable>
+              {props.data.stock < 1 ? (
+                <Pressable
+                  disabled={true}
+                  android_ripple={{
+                    color: "rgba(232,124,128, 0.26)",
+                    borderless: true,
+                    radius: 30,
+                  }}
+                  onPress={minusItem}>
+                  <Icon name="minus" size={15} color="#e87c80" />
+                </Pressable>
+              ) : (
+                <Pressable
+                  android_ripple={{
+                    color: "rgba(232,124,128, 0.26)",
+                    borderless: true,
+                    radius: 30,
+                  }}
+                  onPress={minusItem}>
+                  <Icon name="minus" size={15} color="#e87c80" />
+                </Pressable>
+              )}
             </View>
             <Text style={styles.inputQty}>{quantity}</Text>
             <View style={[styles.btnWrap, { borderLeftWidth: 0 }]}>
-              <Pressable
-                android_ripple={{
-                  color: "rgba(232,124,128, 0.26)",
-                  borderless: true,
-                  radius: 30,
-                }}
-                onPress={plusItem}>
-                <Icon name="plus" size={15} color="#e87c80" />
-              </Pressable>
+              {props.data.stock < 1 ? (
+                <Pressable
+                  disabled={true}
+                  android_ripple={{
+                    color: "rgba(232,124,128, 0.26)",
+                    borderless: true,
+                    radius: 30,
+                  }}
+                  onPress={plusItem}>
+                  <Icon name="plus" size={15} color="#e87c80" />
+                </Pressable>
+              ) : (
+                <Pressable
+                  android_ripple={{
+                    color: "rgba(232,124,128, 0.26)",
+                    borderless: true,
+                    radius: 30,
+                  }}
+                  onPress={plusItem}>
+                  <Icon name="plus" size={15} color="#e87c80" />
+                </Pressable>
+              )}
             </View>
           </View>
         </View>
