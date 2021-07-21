@@ -1,43 +1,47 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, {useEffect} from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
   TextInput,
-  Pressable, TouchableOpacity, Alert, ToastAndroid,
-} from "react-native";
-import { Button, IconButton } from "react-native-paper";
+  Pressable,
+  TouchableOpacity,
+  Alert,
+  ToastAndroid,
+} from 'react-native';
+import {Button, IconButton} from 'react-native-paper';
 import {
   FocusAwareStatusBar,
   deviceHeight,
   deviceWidth,
-} from "../global/component";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { ScrollView } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import url from "../global/url";
+  Prices,
+} from '../global/component';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ScrollView} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import url from '../global/url';
 
-function CartScreen({ navigation }) {
-  const [userId, setUserId] = useState("");
+function CartScreen({navigation}) {
+  const [userId, setUserId] = useState('');
   const [products, setProducts] = useState([]);
-  const [available, setAvailable] = useState("");
-  const [checkoutStatus, setCheckoutStatus] = useState("");
-  const [total, setTotal] = useState("");
+  const [available, setAvailable] = useState('');
+  const [checkoutStatus, setCheckoutStatus] = useState('');
+  const [total, setTotal] = useState('');
 
   useEffect(() => {
-    const unsubsribe = navigation.addListener("focus", () => {
+    const unsubsribe = navigation.addListener('focus', () => {
       const getData = async () => {
         try {
-          const id = await AsyncStorage.getItem("user_id");
+          const id = await AsyncStorage.getItem('user_id');
           setUserId(id);
           const data = {
             user_id: id,
           };
 
-          axios.get(url + "/api/cart", { params: data }).then(res => {
+          axios.get(url + '/api/cart', {params: data}).then(res => {
             setProducts(res.data.products.products);
             setAvailable(res.data.products.available);
             setCheckoutStatus(res.data.products.checkout_status);
@@ -45,7 +49,7 @@ function CartScreen({ navigation }) {
             // Set total
             let total = 0;
             res.data.products.products.map((data, key) => {
-              total += (data.quantity * data.price);
+              total += data.quantity * data.price;
             });
             setTotal(total);
           });
@@ -59,7 +63,7 @@ function CartScreen({ navigation }) {
     return unsubsribe;
   });
 
-  const updateProduct = (productId) => {
+  const updateProduct = productId => {
     const temp = products.filter(product => {
       return product.product_id != productId;
     });
@@ -74,14 +78,14 @@ function CartScreen({ navigation }) {
     // Set products
     setProducts(temp);
     ToastAndroid.showWithGravity(
-      "Berhasil menghapus item dari Keranjang Belanja.",
+      'Berhasil menghapus item dari Keranjang Belanja.',
       ToastAndroid.SHORT,
       ToastAndroid.TOP,
     );
   };
 
   const updateCheckoutStatus = (products, cost) => {
-    let temp = products.filter((data) => {
+    let temp = products.filter(data => {
       return data.stock < 1;
     });
 
@@ -96,7 +100,7 @@ function CartScreen({ navigation }) {
     // Update total cost
     let t = 0;
     cost.map(data => {
-      t += (data.quantity * data.price);
+      t += data.quantity * data.price;
     });
     let totalCost = total - t;
     setTotal(totalCost);
@@ -104,7 +108,7 @@ function CartScreen({ navigation }) {
 
   const updateTotal = (result, method) => {
     let totalTemp = total;
-    if (method == "plus") {
+    if (method == 'plus') {
       setTotal(totalTemp + result);
     } else {
       setTotal(totalTemp - result);
@@ -137,12 +141,37 @@ function CartScreen({ navigation }) {
             console.warn(e);
           }
         },
-      },
-    ]);
+        {
+          text: 'Hapus',
+          onPress: () => {
+            try {
+              const data = {
+                user_id: userId,
+              };
+              axios
+                .get(url + '/api/remove-all-cart', {params: data})
+                .then(res => {
+                  if (res.data.msg == 'success') {
+                    setProducts('');
+                    Alert.alert(
+                      'Success',
+                      'Semua item di keranjang belanja berhasil dihapus.',
+                    );
+                  } else {
+                    Alert.alert('Error', 'Gagal menghapus semua data.');
+                  }
+                });
+            } catch (e) {
+              console.warn(e);
+            }
+          },
+        },
+      ],
+    );
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
       <ScrollView showsVerticalScrollIndicator={false}>
         {products.length < 1 ? (
@@ -150,24 +179,37 @@ function CartScreen({ navigation }) {
         ) : (
           products.map((data, key) => {
             return (
-              <CartItem key={key} data={data} index={key}
-                        onPress={() => navigation.navigate("Detail", {
-                          screen: "DetailScreen",
-                          params: { product_id: data.product_id },
-                        })} updateProduct={updateProduct} updateTotal={updateTotal} />
+              <CartItem
+                key={key}
+                data={data}
+                index={key}
+                onPress={() =>
+                  navigation.navigate('Detail', {
+                    screen: 'DetailScreen',
+                    params: {product_id: data.product_id},
+                  })
+                }
+                updateProduct={updateProduct}
+                updateTotal={updateTotal}
+              />
             );
           })
         )}
       </ScrollView>
       <View style={styles.containerBtn}>
-        <Text style={styles.textTotal}>Total: Rp {total}</Text>
-        <View style={{ flexDirection: "row" }}>
+        <Prices
+          value={total}
+          renderText={value => (
+            <Text style={styles.textTotal}>Total: {value}</Text>
+          )}
+        />
+        <View style={{flexDirection: 'row'}}>
           {products.length < 1 ? (
             <Button
               disabled={true}
               mode="outlined"
               color="#e87c80"
-              labelStyle={{ color: "#e87c80" }}
+              labelStyle={{color: '#e87c80'}}
               onPress={removeAllCart}
               style={styles.btnDeleteAll}>
               Hapus Semua
@@ -176,7 +218,7 @@ function CartScreen({ navigation }) {
             <Button
               mode="outlined"
               color="#e87c80"
-              labelStyle={{ color: "#e87c80" }}
+              labelStyle={{color: '#e87c80'}}
               onPress={removeAllCart}
               style={styles.btnDeleteAll}>
               Hapus Semua
@@ -186,8 +228,8 @@ function CartScreen({ navigation }) {
             <Button
               mode="contained"
               color="#e87c80"
-              labelStyle={{ color: "#fff" }}
-              onPress={() => navigation.navigate("Checkout")}
+              labelStyle={{color: '#fff'}}
+              onPress={() => navigation.navigate('Checkout')}
               style={styles.btnCheckout}>
               Checkout
             </Button>
@@ -196,7 +238,7 @@ function CartScreen({ navigation }) {
               disabled
               mode="contained"
               color="#e87c80"
-              labelStyle={{ color: "#fff" }}
+              labelStyle={{color: '#fff'}}
               style={styles.btnCheckout}>
               Checkout
             </Button>
@@ -220,16 +262,24 @@ function CartItem(props) {
   const plusItem = () => {
     const updateData = async () => {
       const data = {
-        user_id: await AsyncStorage.getItem("user_id"),
+        user_id: await AsyncStorage.getItem('user_id'),
       };
-      await axios.get(url + "/api/plus-item-cart/" + props.data.product_id, { params: data }).then(res => {
-        if (res.data.msg == "success") {
-          setQuantity(quantity + 1);
-          props.updateTotal(props.data.price, "plus");
-        } else {
-          ToastAndroid.showWithGravity("Stok tidak cukup.", ToastAndroid.SHORT, ToastAndroid.TOP);
-        }
-      });
+      await axios
+        .get(url + '/api/plus-item-cart/' + props.data.product_id, {
+          params: data,
+        })
+        .then(res => {
+          if (res.data.msg == 'success') {
+            setQuantity(quantity + 1);
+            props.updateTotal(props.data.price, 'plus');
+          } else {
+            ToastAndroid.showWithGravity(
+              'Stok tidak cukup.',
+              ToastAndroid.SHORT,
+              ToastAndroid.TOP,
+            );
+          }
+        });
     };
 
     updateData();
@@ -238,16 +288,24 @@ function CartItem(props) {
   const minusItem = () => {
     const updateData = async () => {
       const data = {
-        user_id: await AsyncStorage.getItem("user_id"),
+        user_id: await AsyncStorage.getItem('user_id'),
       };
-      await axios.get(url + "/api/minus-item-cart/" + props.data.product_id, { params: data }).then(res => {
-        if (res.data.msg == "success") {
-          setQuantity(quantity - 1);
-          props.updateTotal(props.data.price, "minus");
-        } else {
-          ToastAndroid.showWithGravity("Tidak boleh kurang dari 1.", ToastAndroid.SHORT, ToastAndroid.TOP);
-        }
-      });
+      await axios
+        .get(url + '/api/minus-item-cart/' + props.data.product_id, {
+          params: data,
+        })
+        .then(res => {
+          if (res.data.msg == 'success') {
+            setQuantity(quantity - 1);
+            props.updateTotal(props.data.price, 'minus');
+          } else {
+            ToastAndroid.showWithGravity(
+              'Tidak boleh kurang dari 1.',
+              ToastAndroid.SHORT,
+              ToastAndroid.TOP,
+            );
+          }
+        });
     };
 
     updateData();
@@ -256,10 +314,10 @@ function CartItem(props) {
   const removeCart = async () => {
     try {
       const data = {
-        user_id: await AsyncStorage.getItem("user_id"),
+        user_id: await AsyncStorage.getItem('user_id'),
       };
       axios
-        .get(url + "/api/remove-cart/" + props.data.product_id, {
+        .get(url + '/api/remove-cart/' + props.data.product_id, {
           params: data,
         })
         .then(res => {
@@ -273,30 +331,43 @@ function CartItem(props) {
 
   return (
     <View style={styles.list}>
-      <View style={{ flexDirection: "row" }}>
+      <View style={{flexDirection: 'row'}}>
         <Image
-          source={{ uri: url + "/img/produk/" + props.data.image }}
+          source={{uri: url + '/img/produk/' + props.data.image}}
           style={styles.listImage}
           resizeMode="cover"
         />
         <View style={styles.listContainerText}>
           <TouchableOpacity onPress={props.onPress}>
             <View>
-              <Text style={{ fontSize: 18 }}>{props.data.product_name}
+              <Text style={{fontSize: 18}}>
+                {props.data.product_name}
                 {props.data.stock < 1 ? (
-                  <Text style={{ fontSize: 16 }}> |<Text style={{ color: "#dc3545" }}> Kosong</Text></Text>
-                ) : (<View></View>)}
+                  <Text style={{fontSize: 16}}>
+                    {' '}
+                    |<Text style={{color: '#dc3545'}}> Kosong</Text>
+                  </Text>
+                ) : (
+                  <View></View>
+                )}
               </Text>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>Rp {props.data.price}</Text>
+              <Prices
+                value={props.data.price}
+                renderText={value => (
+                  <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                    {value}
+                  </Text>
+                )}
+              />
             </View>
           </TouchableOpacity>
-          <View style={{ flexDirection: "row" }}>
-            <View style={[styles.btnWrap, { borderRightWidth: 0 }]}>
+          <View style={{flexDirection: 'row'}}>
+            <View style={[styles.btnWrap, {borderRightWidth: 0}]}>
               {props.data.stock < 1 ? (
                 <Pressable
                   disabled={true}
                   android_ripple={{
-                    color: "rgba(232,124,128, 0.26)",
+                    color: 'rgba(232,124,128, 0.26)',
                     borderless: true,
                     radius: 30,
                   }}
@@ -306,7 +377,7 @@ function CartItem(props) {
               ) : (
                 <Pressable
                   android_ripple={{
-                    color: "rgba(232,124,128, 0.26)",
+                    color: 'rgba(232,124,128, 0.26)',
                     borderless: true,
                     radius: 30,
                   }}
@@ -316,12 +387,12 @@ function CartItem(props) {
               )}
             </View>
             <Text style={styles.inputQty}>{quantity}</Text>
-            <View style={[styles.btnWrap, { borderLeftWidth: 0 }]}>
+            <View style={[styles.btnWrap, {borderLeftWidth: 0}]}>
               {props.data.stock < 1 ? (
                 <Pressable
                   disabled={true}
                   android_ripple={{
-                    color: "rgba(232,124,128, 0.26)",
+                    color: 'rgba(232,124,128, 0.26)',
                     borderless: true,
                     radius: 30,
                   }}
@@ -331,7 +402,7 @@ function CartItem(props) {
               ) : (
                 <Pressable
                   android_ripple={{
-                    color: "rgba(232,124,128, 0.26)",
+                    color: 'rgba(232,124,128, 0.26)',
                     borderless: true,
                     radius: 30,
                   }}
@@ -357,67 +428,68 @@ function CartItem(props) {
 
 const styles = StyleSheet.create({
   empty: {
-    height: deviceHeight,
+    flex: 1,
+    height: deviceHeight / 2,
     width: deviceWidth,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   list: {
     padding: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#fff",
-    borderBottomColor: "#eee",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderBottomColor: '#eee',
     borderBottomWidth: 2,
   },
-  listImage: { width: 100, height: 150 },
+  listImage: {width: 100, height: 150},
   listContainerText: {
-    flexDirection: "column",
-    justifyContent: "space-between",
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     marginStart: 10,
   },
   listContainerButton: {
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    alignItems: "center",
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   btnWrap: {
     paddingVertical: 1,
     paddingHorizontal: 8,
-    borderColor: "#e87c80",
+    borderColor: '#e87c80',
     borderWidth: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   inputQty: {
     paddingVertical: 1,
     paddingHorizontal: 8,
-    borderColor: "#e87c80",
+    borderColor: '#e87c80',
     borderWidth: 1,
     width: 50,
-    textAlign: "center",
+    textAlign: 'center',
   },
   containerBtn: {
-    flexDirection: "column",
-    alignItems: "flex-end",
-    justifyContent: "center",
-    backgroundColor: "#fff",
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
     paddingVertical: 12,
     paddingHorizontal: 8,
     elevation: 5,
   },
   textTotal: {
     marginBottom: 8,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 20,
   },
-  btnCheckout: { borderRadius: 8, flex: 0.6, elevation: 0 },
+  btnCheckout: {borderRadius: 8, flex: 0.6, elevation: 0},
   btnDeleteAll: {
     borderRadius: 8,
     flex: 0.4,
     elevation: 0,
     marginEnd: 8,
-    borderColor: "#e87c80",
+    borderColor: '#e87c80',
   },
 });
 

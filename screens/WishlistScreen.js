@@ -13,6 +13,7 @@ import {
   FocusAwareStatusBar,
   deviceHeight,
   deviceWidth,
+  Prices,
 } from '../global/component';
 import {IconButton} from 'react-native-paper';
 import {Badge} from 'react-native-elements';
@@ -94,16 +95,18 @@ function WishlistScreen({navigation}) {
 
   const updateCart = () => {
     try {
-      axios.get(url + '/api/wishlist', {params: {user_id: userId}}).then(res => {
-        setCart(res.data.data.cart);
-      });
+      axios
+        .get(url + '/api/wishlist', {params: {user_id: userId}})
+        .then(res => {
+          setCart(res.data.data.cart);
+        });
     } catch (e) {
       console.warn(e);
     }
   };
 
   return (
-    <View style={{backgroundColor: '#fff'}}>
+    <View style={{flex: 1}}>
       <FocusAwareStatusBar barStyle="light-content" backgroundColor="#e87c80" />
       <ScrollView showsVerticalScrollIndicator={false}>
         {products.length < 1 ? (
@@ -153,16 +156,24 @@ function WishlistItem(props) {
       const data = {
         user_id: user_id,
       };
-      axios.get(url + "/api/add-to-cart/" + props.productId, { params: data }).then(res => {
-        if (res.data.msg == "success") {
-
-          ToastAndroid.showWithGravity("Produk berhasil ditambahkan ke Keranjang Belanja", ToastAndroid.SHORT, ToastAndroid.TOP);
-        } else {
-          ToastAndroid.showWithGravity("Produk gagal ditambahkan ke Keranjang Belanja", ToastAndroid.SHORT, ToastAndroid.TOP);
-        }
-        props.cart()
-      });
-
+      axios
+        .get(url + '/api/add-to-cart/' + props.productId, {params: data})
+        .then(res => {
+          if (res.data.msg == 'success') {
+            ToastAndroid.showWithGravity(
+              'Produk berhasil ditambahkan ke Keranjang Belanja',
+              ToastAndroid.SHORT,
+              ToastAndroid.TOP,
+            );
+          } else {
+            ToastAndroid.showWithGravity(
+              'Produk gagal ditambahkan ke Keranjang Belanja',
+              ToastAndroid.SHORT,
+              ToastAndroid.TOP,
+            );
+          }
+          props.cart();
+        });
     } catch (e) {
       console.warn(e);
     }
@@ -204,9 +215,14 @@ function WishlistItem(props) {
               <Text>Stok: {props.stock}</Text>
             </View>
             <View>
-              <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                Rp {props.price}
-              </Text>
+              <Prices
+                value={props.price}
+                renderText={value => (
+                  <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                    {value}
+                  </Text>
+                )}
+              />
             </View>
           </View>
         </View>
@@ -252,10 +268,11 @@ function WishlistItem(props) {
 
 const styles = StyleSheet.create({
   empty: {
-    height: deviceHeight,
+    flex: 1,
+    height: deviceHeight / 2,
     width: deviceWidth,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   list: {
     padding: 16,

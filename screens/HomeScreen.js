@@ -14,7 +14,8 @@ import url from '../global/url';
 import axios from 'axios';
 import {IconButton} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FocusAwareStatusBar} from '../global/component';
+import {FocusAwareStatusBar, Prices} from '../global/component';
+import NumberFormat from 'react-number-format';
 
 function HomeScreen({navigation}) {
   const [data, setData] = useState('');
@@ -43,34 +44,32 @@ function HomeScreen({navigation}) {
 
   // Badge
   useLayoutEffect(() => {
-      navigation.setOptions({
-        headerRight: () => (
-          <View>
-            <IconButton
-              icon="shopping-outline"
-              size={26}
-              color="#e87c80"
-              style={{paddingEnd: 0, backgroundColor: '#fff'}}
-              onPress={() =>
-                navigation.navigate('Cart', {screen: 'CartScreen'})
-              }
+    navigation.setOptions({
+      headerRight: () => (
+        <View>
+          <IconButton
+            icon="shopping-outline"
+            size={26}
+            color="#e87c80"
+            style={{paddingEnd: 0, backgroundColor: '#fff'}}
+            onPress={() => navigation.navigate('Cart', {screen: 'CartScreen'})}
+          />
+          {cart < 1 ? (
+            <View></View>
+          ) : (
+            <Badge
+              value={cart}
+              badgeStyle={{backgroundColor: '#000'}}
+              containerStyle={{
+                position: 'absolute',
+                top: 9,
+                right: 1,
+              }}
             />
-            {cart < 1 ? (
-              <View></View>
-            ) : (
-              <Badge
-                value={cart}
-                badgeStyle={{backgroundColor: '#000'}}
-                containerStyle={{
-                  position: 'absolute',
-                  top: 9,
-                  right: 1,
-                }}
-              />
-            )}
-          </View>
-        ),
-      });
+          )}
+        </View>
+      ),
+    });
   });
 
   return (
@@ -106,9 +105,14 @@ function HomeScreen({navigation}) {
               <Card.Title style={{marginTop: 8, marginBottom: 0}}>
                 {item.product_name}
               </Card.Title>
-              <Card.Title style={{marginTop: 8, marginBottom: 0}}>
-                Rp {item.price}
-              </Card.Title>
+              <Prices
+                value={item.price}
+                renderText={value => (
+                  <Card.Title style={{marginTop: 8, marginBottom: 0}}>
+                    {value}
+                  </Card.Title>
+                )}
+              />
             </Pressable>
           </Card>
         )}
