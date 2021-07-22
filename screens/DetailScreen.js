@@ -202,9 +202,8 @@ const DetailScreen = ({ route, navigation }) => {
         </View>
       </ScrollView>
       <View style={styles.containerBtn}>
-        {product.stock < 1 ? (
+        {product.stock > 0 ? (
           <Button
-            disabled
             mode="contained"
             color="#e87c80"
             labelStyle={{ color: "#fff" }}
@@ -214,6 +213,7 @@ const DetailScreen = ({ route, navigation }) => {
           </Button>
         ) : (
           <Button
+            disabled={true}
             mode="contained"
             color="#e87c80"
             labelStyle={{ color: "#fff" }}

@@ -181,9 +181,9 @@ function CartScreen({ navigation }) {
           )}
         />
         <View style={{ flexDirection: "row" }}>
-          {products.length < 1 ? (
+          {products.length > 0 ? (
             <Button
-              disabled={true}
+              disabled={false}
               mode="outlined"
               color="#e87c80"
               labelStyle={{ color: "#e87c80" }}
@@ -193,6 +193,7 @@ function CartScreen({ navigation }) {
             </Button>
           ) : (
             <Button
+              disabled={true}
               mode="outlined"
               color="#e87c80"
               labelStyle={{ color: "#e87c80" }}
