@@ -4,11 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Icons from 'react-native-vector-icons/Ionicons';
-import {IconButton} from 'react-native-paper';
-import {Badge} from 'react-native-elements';
 
 import HomeScreen from './HomeScreen';
-import OrderScreen from './OrderScreen';
 import WishlistScreen from './WishlistScreen';
 import DetailScreen from './DetailScreen';
 import AccountScreen from './AccountScreen';
