@@ -132,6 +132,7 @@ function CartScreen({ navigation }) {
                 if (res.data.msg == "success") {
                   setProducts("");
                   setTotal(0);
+                  setCheckoutStatus(0);
                   Alert.alert("Success", "Semua item di keranjang belanja berhasil dihapus.");
                 } else {
                   Alert.alert("Error", "Gagal menghapus semua data.");
