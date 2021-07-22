@@ -10,7 +10,7 @@ import axios from "axios";
 function PaymentPendingScreen({ navigation }) {
   const [transactions, setTransactions] = useState([]);
   const [details, setDetails] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -20,14 +20,14 @@ function PaymentPendingScreen({ navigation }) {
           const data = {
             user_id: id,
           };
-          setLoading(true)
+          setLoading(true);
           axios.get(url + "/api/transaction/payment-pending", { params: data }).then(res => {
             setTransactions(res.data.payments.transactions);
             setDetails(res.data.payments.details);
           }).catch(err => {
-            console.warn(err)
+            console.warn(err);
           }).finally(() => {
-            setLoading(false)
+            setLoading(false);
           });
         } catch (e) {
           console.warn(e);
@@ -38,12 +38,12 @@ function PaymentPendingScreen({ navigation }) {
     return unsubscribe;
   }, []);
 
-  if(loading){
+  if (loading) {
     return (
       <View style={styles.empty}>
         <Text>Loading</Text>
       </View>
-    )
+    );
   }
 
   return (
@@ -53,7 +53,10 @@ function PaymentPendingScreen({ navigation }) {
       ) : (
         transactions.map((data, key) => {
           return (
-            <OrderList key={key} index={key} onPress={() => navigation.navigate("OrderDetail", {screen: 'OrderDetailScreen', params: {id: data.transaction_id}})} id={data.transaction_id}
+            <OrderList key={key} index={key} onPress={() => navigation.navigate("OrderDetail", {
+              screen: "OrderDetailScreen",
+              params: { id: data.transaction_id, status: 1 },
+            })} id={data.transaction_id}
                        detail={details[key]} total={data.total} />
           );
         })
@@ -63,15 +66,15 @@ function PaymentPendingScreen({ navigation }) {
 }
 
 function OrderList(props) {
-  let t = 0
+  let t = 0;
   return (
     <View style={styles.list}>
       <View style={styles.listHeader}>
         <Text>#{props.id}</Text>
-        <Text style={{ color: "tomato" }}>Belum Dibayar</Text>
+        <Text style={{ color: "tomato" }}>Belum Bayar</Text>
       </View>
       {props.detail.map((data) => {
-        t += (data.price * data.count)
+        t += (data.price * data.count);
         return (
           <View style={styles.listItem}>
             <Image
@@ -117,7 +120,7 @@ function OrderEmpty() {
 const styles = StyleSheet.create({
   empty: {
     flex: 1,
-    height: deviceHeight / 2,
+    height: deviceHeight / 3,
     width: deviceWidth,
     alignItems: "center",
     justifyContent: "flex-end",

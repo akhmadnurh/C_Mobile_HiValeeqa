@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Alert, Linking } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button, TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -7,20 +7,22 @@ import { deviceHeight, deviceWidth, FocusAwareStatusBar } from "../../global/com
 import url from "../../global/url";
 import axios from "axios";
 import Animated from "react-native-reanimated";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // import addWhitelistedNativeProps from "module:react-native-reanimated.Animated.addWhitelistedNativeProps";
 
 function OrderDetailScreen({ route, navigation }) {
-  const { id } = route.params;
+  const { id, status } = route.params;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [bank, setBank] = useState("");
   useEffect(() => {
 
     const unsubscribe = navigation.addListener("focus", () => {
       setLoading(true);
       axios.get(url + "/api/transaction/detail/" + id).then(res => {
         setProducts(res.data.products);
+        setBank(res.data.bank);
       }).catch(e => {
         console.warn(e);
       }).finally(() => {
@@ -38,26 +40,55 @@ function OrderDetailScreen({ route, navigation }) {
     );
   }
 
+  const confirmTransaction = () => {
+    Alert.alert("Konfirmasi", "Apakah anda yakin telah menerima pesanan?", [
+      {
+        text: "Batal",
+        style: "cancel",
+      },
+      {
+        text: "Konfirmasi",
+        onPress: () => {
+          axios.get(url + "/api/transaction/confirm/" + id).then(res => {
+            if (res.data.msg == "success") {
+              Alert.alert("Success", "Transaksi Berhasil!");
+              navigation.navigate("Tabs", { screen: "Home" });
+            } else {
+              Alert.alert("Error", "Gagal Konfirmasi Pesanan");
+            }
+          });
+        },
+      },
+    ]);
+  };
+
   return (
     <ScrollView>
       <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
-      {/*<StatusOrder status={status}/>*/}
+      <StatusOrder status={status} />
       {/*<ShippingAddress />*/}
-      <ItemTransaction data={products}/>
+      <ItemTransaction data={products} />
       {/* <NoResi /> */}
       <Rekening />
-      {/* <InputBank /> */}
-      {/* <Button
-        mode="contained"
-        color="#e87c80"
-        style={{elevation: 0, marginHorizontal: 16, marginTop: 12}}
-        labelStyle={{color: '#fff'}}>
-        Konfirmasi
-      </Button> */}
+      <InputBank bank={bank} />
+      {status === 3 ? (
+        <Button
+          mode="contained"
+          color="#e87c80"
+          onPress={confirmTransaction}
+          style={{ elevation: 0, marginHorizontal: 16, marginTop: 12 }}
+          labelStyle={{ color: "#fff" }}>
+          Konfirmasi
+        </Button>
+      ) : (
+        <View></View>
+      )}
+
       <Button
         mode="outlined"
         icon="whatsapp"
         color="#e87c80"
+        onPress={() => Linking.openURL("https://wa.me/6285784197425")}
         style={{ marginHorizontal: 16, marginTop: 12, marginBottom: 24 }}>
         Hubungi Admin
       </Button>
@@ -66,14 +97,24 @@ function OrderDetailScreen({ route, navigation }) {
 }
 
 function StatusOrder(props) {
+  let msg = "aa";
+
+  if (props.status == 1) {
+    msg = "Belum Bayar";
+  } else if (props.status == 2) {
+    msg = "Sedang Dikemas";
+  } else if (props.status == 3) {
+    msg = "Proses Pengiriman";
+  } else if (props.status == 4) {
+    msg = "Selesai";
+  } else if (props.status == 5) {
+    msg = "Gagal";
+  }
+
   return (
     <View style={[styles.shipContainer, { backgroundColor: "#fae4e5" }]}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{props.status}</Text>
-        {/* <Text style={styles.title}>Barang Dikemas</Text>
-        <Text style={styles.title}>Proses Dikirim</Text>
-        <Text style={styles.title}>Selesai</Text>
-        <Text style={styles.title}>Gagal</Text> */}
+        <Text style={styles.title}>{msg}</Text>
       </View>
     </View>
   );
@@ -105,14 +146,14 @@ function ShippingAddress() {
 }
 
 function ItemTransaction(props) {
-  let t = 0
+  let t = 0;
   return (
     <View style={styles.transactionContainer}>
       <View style={styles.transactionHeader}>
         <Text>#1</Text>
       </View>
       {props.data.map(data => {
-        t += (data.price * data.count)
+        t += (data.price * data.count);
         return (
           <View style={styles.listItem}>
             <Image
@@ -126,7 +167,7 @@ function ItemTransaction(props) {
               <Text>x{data.count}</Text>
             </View>
           </View>
-        )
+        );
       })}
 
       <View style={{ paddingHorizontal: 16, marginTop: 8 }}>
@@ -140,23 +181,23 @@ function ItemTransaction(props) {
         </View>
         <View style={[styles.textSubTot, { marginBottom: 0 }]}>
           <Text style={{ fontSize: 16, fontWeight: "bold" }}>Total Bayar</Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Rp {t+20000}</Text>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Rp {t + 20000}</Text>
         </View>
       </View>
     </View>
   );
 }
 
-function InputBank() {
+function InputBank(props) {
   return (
     <View style={styles.shipContainer}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Konfirmasi Pembayaran</Text>
       </View>
       <View style={{ marginTop: 8, marginStart: 8 }}>
-        <TextInput mode="outlined" label="Bank Anda" />
-        <TextInput mode="outlined" label="Nama (Sesuai Rekening)" />
-        <TextInput mode="outlined" label="Rekening" />
+        <TextInput mode="outlined" label="Bank Anda" disabled={true} value={props.bank.bank} />
+        <TextInput mode="outlined" label="Nama (Sesuai Rekening)" disabled={true} value={props.bank.name} />
+        <TextInput mode="outlined" label="Rekening" disabled={true} value={props.bank.name} />
       </View>
     </View>
   );
