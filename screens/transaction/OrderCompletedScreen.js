@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, Alert} from 'react-native';
+import {View, Text, StyleSheet, Image, ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Button} from 'react-native-paper';
 import {
   deviceHeight,
   deviceWidth,
   FocusAwareStatusBar,
+  Prices,
 } from '../../global/component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import url from '../../global/url';
@@ -48,8 +49,9 @@ function OrderCompletedScreen({navigation}) {
 
   if (loading) {
     return (
-      <View style={styles.empty}>
-        <Text>Loading</Text>
+      <View style={styles.loadingContainer}>
+        <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <ActivityIndicator size="large" color="#e87c80" />
       </View>
     );
   }
@@ -101,9 +103,14 @@ function OrderList(props) {
             />
             <View style={styles.listItemText}>
               <Text style={{fontSize: 16}}>{data.product_name}</Text>
-              <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                Rp {data.price}
-              </Text>
+              <Prices
+                value={data.price}
+                renderText={value => (
+                  <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                    {value}
+                  </Text>
+                )}
+              />
               <Text>x{data.count}</Text>
             </View>
           </View>
@@ -112,7 +119,12 @@ function OrderList(props) {
 
       <View style={styles.textSubTot}>
         <Text style={{fontSize: 16, fontWeight: 'bold'}}>Total Bayar</Text>
-        <Text style={{fontSize: 16, fontWeight: 'bold'}}>Rp {t}</Text>
+        <Prices
+          value={t}
+          renderText={value => (
+            <Text style={{fontSize: 16, fontWeight: 'bold'}}>{value}</Text>
+          )}
+        />
       </View>
       <View style={styles.containerBtn}>
         <Button
@@ -143,6 +155,11 @@ const styles = StyleSheet.create({
     width: deviceWidth,
     alignItems: 'center',
     justifyContent: 'flex-end',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   list: {
     paddingVertical: 16,

@@ -1,60 +1,77 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, Alert, Linking } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { Button, TextInput } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { deviceHeight, deviceWidth, FocusAwareStatusBar } from "../../global/component";
-import url from "../../global/url";
-import axios from "axios";
-import Animated from "react-native-reanimated";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  Linking,
+  ActivityIndicator,
+} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+import {Button, TextInput} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  deviceHeight,
+  deviceWidth,
+  FocusAwareStatusBar,
+  Prices,
+} from '../../global/component';
+import url from '../../global/url';
+import axios from 'axios';
+import Animated from 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // import addWhitelistedNativeProps from "module:react-native-reanimated.Animated.addWhitelistedNativeProps";
 
-function OrderDetailScreen({ route, navigation }) {
-  const { id, status } = route.params;
+function OrderDetailScreen({route, navigation}) {
+  const {id, status} = route.params;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [bank, setBank] = useState("");
+  const [bank, setBank] = useState('');
   useEffect(() => {
-
-    const unsubscribe = navigation.addListener("focus", () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       setLoading(true);
-      axios.get(url + "/api/transaction/detail/" + id).then(res => {
-        setProducts(res.data.products);
-        setBank(res.data.bank);
-      }).catch(e => {
-        console.warn(e);
-      }).finally(() => {
-        setLoading(false);
-      });
+      axios
+        .get(url + '/api/transaction/detail/' + id)
+        .then(res => {
+          setProducts(res.data.products);
+          setBank(res.data.bank);
+        })
+        .catch(e => {
+          console.warn(e);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     });
     return unsubscribe;
   }, []);
 
   if (loading) {
     return (
-      <View style={styles.loading}>
-        <Text>Loading</Text>
+      <View style={styles.loadingContainer}>
+        <FocusAwareStatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <ActivityIndicator size="large" color="#e87c80" />
       </View>
     );
   }
 
   const confirmTransaction = () => {
-    Alert.alert("Konfirmasi", "Apakah anda yakin telah menerima pesanan?", [
+    Alert.alert('Konfirmasi', 'Apakah anda yakin telah menerima pesanan?', [
       {
-        text: "Batal",
-        style: "cancel",
+        text: 'Batal',
+        style: 'cancel',
       },
       {
-        text: "Konfirmasi",
+        text: 'Konfirmasi',
         onPress: () => {
-          axios.get(url + "/api/transaction/confirm/" + id).then(res => {
-            if (res.data.msg == "success") {
-              Alert.alert("Success", "Transaksi Berhasil!");
-              navigation.navigate("Tabs", { screen: "Home" });
+          axios.get(url + '/api/transaction/confirm/' + id).then(res => {
+            if (res.data.msg == 'success') {
+              Alert.alert('Success', 'Transaksi Berhasil!');
+              navigation.navigate('Tabs', {screen: 'Home'});
             } else {
-              Alert.alert("Error", "Gagal Konfirmasi Pesanan");
+              Alert.alert('Error', 'Gagal Konfirmasi Pesanan');
             }
           });
         },
@@ -76,8 +93,8 @@ function OrderDetailScreen({ route, navigation }) {
           mode="contained"
           color="#e87c80"
           onPress={confirmTransaction}
-          style={{ elevation: 0, marginHorizontal: 16, marginTop: 12 }}
-          labelStyle={{ color: "#fff" }}>
+          style={{elevation: 0, marginHorizontal: 16, marginTop: 12}}
+          labelStyle={{color: '#fff'}}>
           Konfirmasi
         </Button>
       ) : (
@@ -88,8 +105,8 @@ function OrderDetailScreen({ route, navigation }) {
         mode="outlined"
         icon="whatsapp"
         color="#e87c80"
-        onPress={() => Linking.openURL("https://wa.me/6285784197425")}
-        style={{ marginHorizontal: 16, marginTop: 12, marginBottom: 24 }}>
+        onPress={() => Linking.openURL('https://wa.me/6285784197425')}
+        style={{marginHorizontal: 16, marginTop: 12, marginBottom: 24}}>
         Hubungi Admin
       </Button>
     </ScrollView>
@@ -97,22 +114,22 @@ function OrderDetailScreen({ route, navigation }) {
 }
 
 function StatusOrder(props) {
-  let msg = "aa";
+  let msg = 'aa';
 
   if (props.status == 1) {
-    msg = "Belum Bayar";
+    msg = 'Belum Bayar';
   } else if (props.status == 2) {
-    msg = "Sedang Dikemas";
+    msg = 'Sedang Dikemas';
   } else if (props.status == 3) {
-    msg = "Proses Pengiriman";
+    msg = 'Proses Pengiriman';
   } else if (props.status == 4) {
-    msg = "Selesai";
+    msg = 'Selesai';
   } else if (props.status == 5) {
-    msg = "Gagal";
+    msg = 'Gagal';
   }
 
   return (
-    <View style={[styles.shipContainer, { backgroundColor: "#fae4e5" }]}>
+    <View style={[styles.shipContainer, {backgroundColor: '#fae4e5'}]}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{msg}</Text>
       </View>
@@ -153,35 +170,47 @@ function ItemTransaction(props) {
         <Text>#1</Text>
       </View>
       {props.data.map(data => {
-        t += (data.price * data.count);
+        t += data.price * data.count;
         return (
           <View style={styles.listItem}>
             <Image
-              source={{ uri: url + "/img/produk/" + data.image }}
-              style={{ width: 50, height: 75 }}
+              source={{uri: url + '/img/produk/' + data.image}}
+              style={{width: 50, height: 75}}
               resizeMode="cover"
             />
             <View style={styles.listItemText}>
-              <Text style={{ fontSize: 16 }}>{data.product_name}</Text>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>Rp {data.price}</Text>
+              <Text style={{fontSize: 16}}>{data.product_name}</Text>
+              <Prices
+                value={data.price}
+                renderText={value => (
+                  <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                    {value}
+                  </Text>
+                )}
+              />
               <Text>x{data.count}</Text>
             </View>
           </View>
         );
       })}
 
-      <View style={{ paddingHorizontal: 16, marginTop: 8 }}>
+      <View style={{paddingHorizontal: 16, marginTop: 8}}>
         <View style={styles.textSubTot}>
           <Text>Subtotal</Text>
-          <Text>Rp {t}</Text>
+          <Prices value={t} renderText={value => <Text>{value}</Text>} />
         </View>
         <View style={styles.textSubTot}>
           <Text>Ongkos Kirim</Text>
-          <Text>Rp 20000</Text>
+          <Prices value={20000} renderText={value => <Text>{value}</Text>} />
         </View>
-        <View style={[styles.textSubTot, { marginBottom: 0 }]}>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Total Bayar</Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Rp {t + 20000}</Text>
+        <View style={[styles.textSubTot, {marginBottom: 0}]}>
+          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Total Bayar</Text>
+          <Prices
+            value={t + 20000}
+            renderText={value => (
+              <Text style={{fontSize: 16, fontWeight: 'bold'}}>{value}</Text>
+            )}
+          />
         </View>
       </View>
     </View>
@@ -194,10 +223,25 @@ function InputBank(props) {
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Konfirmasi Pembayaran</Text>
       </View>
-      <View style={{ marginTop: 8, marginStart: 8 }}>
-        <TextInput mode="outlined" label="Bank Anda" disabled={true} value={props.bank.bank} />
-        <TextInput mode="outlined" label="Nama (Sesuai Rekening)" disabled={true} value={props.bank.name} />
-        <TextInput mode="outlined" label="Rekening" disabled={true} value={props.bank.name} />
+      <View style={{marginTop: 8, marginStart: 8}}>
+        <TextInput
+          mode="outlined"
+          label="Bank Anda"
+          disabled={true}
+          value={props.bank.bank}
+        />
+        <TextInput
+          mode="outlined"
+          label="Nama (Sesuai Rekening)"
+          disabled={true}
+          value={props.bank.name}
+        />
+        <TextInput
+          mode="outlined"
+          label="Rekening"
+          disabled={true}
+          value={props.bank.account}
+        />
       </View>
     </View>
   );
@@ -209,11 +253,11 @@ function Rekening() {
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Bank Transfer</Text>
       </View>
-      <View style={{ marginStart: 9, marginTop: 8 }}>
-        <Text style={{ fontWeight: "bold", fontSize: 16, color: "#6c757d" }}>
+      <View style={{marginStart: 9, marginTop: 8}}>
+        <Text style={{fontWeight: 'bold', fontSize: 16, color: '#6c757d'}}>
           BNI (Akhmad Nur Hidayatulloh)
         </Text>
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>89787654324</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 16}}>89787654324</Text>
       </View>
     </View>
   );
@@ -224,24 +268,29 @@ const styles = StyleSheet.create({
     flex: 1,
     height: deviceHeight / 2,
     width: deviceWidth,
-    alignItems: "center",
-    justifyContent: "flex-end",
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   shipContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 16,
     margin: 8,
     borderRadius: 20,
   },
   titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginStart: 8,
-    color: "#000",
+    color: '#000',
   },
   shipContent: {
     marginStart: 30,
@@ -250,30 +299,30 @@ const styles = StyleSheet.create({
   transactionContainer: {
     margin: 8,
     paddingVertical: 16,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 20,
   },
   transactionHeader: {
     paddingHorizontal: 16,
-    borderBottomColor: "#eee",
+    borderBottomColor: '#eee',
     borderBottomWidth: 1,
     paddingBottom: 8,
   },
   listItem: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    flexDirection: "row",
-    borderBottomColor: "#eee",
+    flexDirection: 'row',
+    borderBottomColor: '#eee',
     borderBottomWidth: 1,
   },
   listItemText: {
-    flexDirection: "column",
-    justifyContent: "space-between",
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     marginStart: 12,
   },
   textSubTot: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 8,
   },
 });
