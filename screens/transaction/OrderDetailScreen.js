@@ -97,6 +97,15 @@ function OrderDetailScreen({route, navigation}) {
           labelStyle={{color: '#fff'}}>
           Konfirmasi
         </Button>
+      ) : status === 1 ? (
+        <Button
+          mode="contained"
+          color="#dc3545"
+          onPress={() => console.log('batalkan')}
+          style={{elevation: 0, marginHorizontal: 16, marginTop: 12}}
+          labelStyle={{color: '#fff'}}>
+          Batalkan
+        </Button>
       ) : (
         <View></View>
       )}

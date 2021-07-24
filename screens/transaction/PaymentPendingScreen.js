@@ -135,18 +135,10 @@ function OrderList(props) {
       </View>
       <View style={styles.containerBtn}>
         <Button
-          mode="outlined"
-          color="tomato"
-          labelStyle={{color: 'tomato'}}
-          style={{borderRadius: 8, flex: 0.2, elevation: 0, marginEnd: 6}}
-          onPress={props.onPress}>
-          Batalkan
-        </Button>
-        <Button
           mode="contained"
           color="#e87c80"
           labelStyle={{color: '#fff'}}
-          style={{borderRadius: 8, flex: 0.7, elevation: 0}}
+          style={{borderRadius: 8, flex: 0.4, elevation: 0}}
           onPress={props.onPress}>
           Rincian Pesanan
         </Button>
