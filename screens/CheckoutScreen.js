@@ -61,6 +61,10 @@ function CheckoutScreen({navigation}) {
                         index: 0,
                         routes: [{name: 'Tabs'}],
                       });
+                      Alert.alert(
+                        'Checkout Berhasil',
+                        'Anda akan dihubungi pihak admin 1x24 via WhatsApp untuk konfirmasi pembayaran, atau chat admin terlebih dahulu untuk mempercepat konfirmasi',
+                      );
                     } else {
                       Alert.alert('Error', 'Checkout gagal.');
                     }

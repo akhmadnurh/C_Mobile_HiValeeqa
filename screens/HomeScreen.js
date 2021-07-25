@@ -184,7 +184,8 @@ function HomeScreen({navigation}) {
                 style={styles.cardImage}
                 source={{uri: url + '/img/produk/' + item.image}}
               />
-              <Card.Title style={{marginTop: 8, marginBottom: 0}}>
+              <Card.Title
+                style={{marginTop: 8, marginBottom: 0, fontWeight: 'normal'}}>
                 {item.product_name}
               </Card.Title>
               <Prices
